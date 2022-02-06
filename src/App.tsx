@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-
-import Button from 'react-boostrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
 
 const App = () => {
   return (
-      <Button as={Col} variant="primary">Button #1</Button>
+      <Button variant="primary">Button #1</Button>
   );
 }
 
