@@ -1,0 +1,27 @@
+.main {
+    padding: 1% 5%;
+    display: grid;
+    
+    justify-content: space-between;
+
+    grid-template-columns: 1fr .2fr;
+
+    column-gap: 1%;
+    
+    width: 100vw;
+    height: 100vh;
+
+    background-color: beige;
+}
+
+.process-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    row-gap: 1%;
+}
+
+.bottom {
+    background-color: green;
+}

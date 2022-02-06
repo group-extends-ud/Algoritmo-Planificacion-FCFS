@@ -1,0 +1,12 @@
+.semaphore {
+    width: 100%;
+    height: 15%;
+}
+
+.semaphore.green {
+    background-color: blue;
+}
+
+.semaphore.red {
+    background-color: red;
+}

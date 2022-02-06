@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 export class ProcessInputModel {
     private name: string;
     private commingTime: number;
@@ -24,6 +26,7 @@ export class ProcessInputModel {
 }
 
 export class ProcessModel extends ProcessInputModel {
+    private id: string;
     private startTime: number;
     private endTime: number;
     private waitingTime: number;
@@ -31,11 +34,14 @@ export class ProcessModel extends ProcessInputModel {
 
     public constructor({Name, CommingTime, BurstTime}: ProcessInputModel) {
         super(Name, CommingTime, BurstTime);
+        this.id = v4();
         this.startTime = -1;
         this.endTime = -1;
         this.waitingTime = -1;
         this.turnAroundTime = -1;
     }
+
+    public get Id(): string {return this.id;}
 
     public get StartTime(): number {return this.startTime}
     public set StartTime(startTime: number) {this.startTime = startTime;}

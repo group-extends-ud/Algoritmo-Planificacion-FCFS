@@ -1,0 +1,8 @@
+.table-container {
+    background-color: cyan;
+    overflow-y: auto;
+}
+
+table tbody tr td {
+    text-align: center;
+}
