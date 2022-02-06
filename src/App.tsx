@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
 
+import Button from 'react-boostrap/Button';
+
 const App = () => {
   return (
-    <h1>Hola Mundo</h1>
+      <Button as={Col} variant="primary">Button #1</Button>
   );
 }
 
