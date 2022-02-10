@@ -6,6 +6,7 @@ import Semaphore from "./Semaphore";
 const Options = () => (
     <div className='bottom'>
         <Semaphore />
+        <hr></hr>
         <ProcessSettings />
     </div>
 );

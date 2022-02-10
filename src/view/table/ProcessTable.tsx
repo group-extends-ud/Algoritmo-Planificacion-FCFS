@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import './table.css';
 
 import { PropsTable } from 'util/props';
+import { ProcessModel } from 'models/ProcessModel';
 
 const ProcessTable = ({ process }: PropsTable) => (
     <div className='table-container scrollable'>
@@ -22,7 +23,7 @@ const ProcessTable = ({ process }: PropsTable) => (
                 </tr>
             </thead>
             <tbody>
-                {process.map(p => (
+                {process.map((p:ProcessModel) => (
                     <tr key={p.Id}>
                         <td>{p.Id}</td>
                         <td>{p.Name}</td>

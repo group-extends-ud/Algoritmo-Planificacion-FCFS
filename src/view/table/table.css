@@ -1,8 +1,17 @@
 .table-container {
-    background-color: cyan;
-    overflow-y: auto;
+    /*background-color: cyan;*/
+    border:1px solid green;
+    overflow: scroll;
 }
 
 table tbody tr td {
     text-align: center;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: cyan;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: yellowgreen;
 }

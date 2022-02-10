@@ -10,20 +10,24 @@ const ProcessSettings = () => {
     return (
         <div className='buttons'>
             <FloatingLabel controlId="floatingInput" label="Segundos">
-                <Form.Control type="number" min="30" />
+                <Form.Control id="floatingInput" type="number" min="30" />
             </FloatingLabel>
+            <br></br>
             <Button onClick={() => setShow(true)}>Agregar Proceso</Button>
+            
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Ingrese datos del proceso</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Agregar
                     </Button>
                     <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                        Guardar
                     </Button>
                 </Modal.Footer>
             </Modal>
