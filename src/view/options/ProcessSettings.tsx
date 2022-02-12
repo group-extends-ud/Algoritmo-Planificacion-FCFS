@@ -1,22 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Modal from "react-bootstrap/Modal";
 
-import { ComputedProcessContext } from "context/ComputedContext";
 import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
+import { PropsHandler } from "util/props";
 
-const ProcessSettings = () => {
+const ProcessSettings = ({ handleProcessUpdate }: PropsHandler) => {
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
 
     const [form, setForm] = useState<any>({});
     const handleChange = (e: any) => setForm({ [e.target.name]: e.target.value, ...form });
-
-
-    const { globalProcess, updateGlobalProcess } = useContext(ComputedProcessContext);
     const handleSubmitProcess = (): void => {
 
         const process: ProcessInputModel = new ProcessInputModel(
@@ -25,8 +22,9 @@ const ProcessSettings = () => {
             form.incomingTime
         );
 
-        globalProcess.push(new ProcessModel(process));
-        updateGlobalProcess(globalProcess);
+        console.log(form);
+
+        handleProcessUpdate(new ProcessModel(process));
 
         handleClose();
     }
@@ -87,9 +85,6 @@ const ProcessSettings = () => {
             </Modal>
 
             <Button>Iniciar</Button>
-            {
-                JSON.stringify(form)
-            }
         </div>
     );
 }

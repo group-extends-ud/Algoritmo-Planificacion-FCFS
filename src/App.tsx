@@ -3,16 +3,17 @@ import './App.css';
 import MainView from 'view/MainView';
 import { LockProcessContext,queueLockedProcess } from 'context/LockContext';
 import { ComputedProcessContext,computedProcess } from 'context/ComputedContext';
+import { ProcessModel } from 'models/ProcessModel';
 
 const App = () => {
 
   const [lockedProcess,updateLockedProcess] = useState(queueLockedProcess);
-  const [globalProcess,updateGlobalProcess] = useState(computedProcess);
+  const [processList,handleProcess] = useState(computedProcess);
 
   return (
-    <ComputedProcessContext.Provider value={{globalProcess,updateGlobalProcess}}>
+    <ComputedProcessContext.Provider value={processList}>
       <LockProcessContext.Provider value={{lockedProcess,updateLockedProcess}}>
-        <MainView />
+        <MainView handleProcessUpdate={(newProcess: ProcessModel) => {handleProcess([...processList, newProcess])}} />
       </LockProcessContext.Provider>
     </ComputedProcessContext.Provider>
   );

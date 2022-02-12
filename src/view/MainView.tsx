@@ -5,17 +5,18 @@ import Options from './options/Options';
 import './main.css';
 
 import { ComputedProcessContext } from 'context/ComputedContext';
+import { PropsHandler } from 'util/props';
 
-const MainView = () => {
-  const { globalProcess } = useContext(ComputedProcessContext);
+const MainView = ({ handleProcessUpdate }: PropsHandler) => {
+  const processList = useContext(ComputedProcessContext);
 
   return (
     <div className='main'>
       <div className='process-container'>
-        <ProcessTable process={globalProcess} />
+        <ProcessTable process={processList} />
         <GanttDiagram />
       </div>
-      <Options />
+      <Options handleProcessUpdate={handleProcessUpdate} />
     </div>
   );
 }
