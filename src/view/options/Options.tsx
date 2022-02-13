@@ -4,11 +4,11 @@ import './options.css';
 import ProcessSettings from "./ProcessSettings";
 import Semaphore from "./Semaphore";
 
-const Options = ({ handleProcessUpdate }: PropsHandler) => (
+const Options = ({ handleProcessUpdate, handleTimerUpdate }: PropsHandler) => (
     <div className='bottom'>
         <Semaphore />
         <hr></hr>
-        <ProcessSettings handleProcessUpdate={handleProcessUpdate} />
+        <ProcessSettings handleTimerUpdate={handleTimerUpdate} handleProcessUpdate={handleProcessUpdate} />
     </div>
 );
 

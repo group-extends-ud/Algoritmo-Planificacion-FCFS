@@ -41,6 +41,17 @@ export class ProcessModel extends ProcessInputModel {
         this.turnAroundTime = -1;
     }
 
+    public setProcess(process: ProcessModel): void {
+        this.id = process.id;
+        this.Name = process.Name;
+        this.CommingTime = process.CommingTime;
+        this.BurstTime = process.BurstTime;
+        this.startTime = process.startTime;
+        this.endTime = process.endTime;
+        this.waitingTime = process.waitingTime;
+        this.turnAroundTime = process.turnAroundTime;
+    }
+
     public get Id(): string {return this.id;}
 
     public get StartTime(): number {return this.startTime}

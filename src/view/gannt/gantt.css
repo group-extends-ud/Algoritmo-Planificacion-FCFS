@@ -1,4 +1,16 @@
 .gantt {
-    /*background-color: red;*/
-    border:1px solid green;
+    overflow-x: scroll;
+    max-width: 100%;
+}
+
+.times {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.time {
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
 }

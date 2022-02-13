@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -6,33 +6,33 @@ import Modal from "react-bootstrap/Modal";
 
 import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { PropsHandler } from "util/props";
+import { TimingContext } from "context/TimingContext";
 
-const ProcessSettings = ({ handleProcessUpdate }: PropsHandler) => {
+const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate }: PropsHandler) => {
+
+    const currentTimer = useContext(TimingContext);
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
 
-    const [form, setForm] = useState<any>({});
-    const handleChange = (e: any) => setForm({ [e.target.name]: e.target.value, ...form });
+    const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '' });
+    const handleChange = (e: any) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
     const handleSubmitProcess = (): void => {
 
-        const process: ProcessInputModel = new ProcessInputModel(
-            form.name,
-            form.burst,
-            form.incomingTime
-        );
+        handleProcessUpdate(new ProcessModel(
+            new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
+        ));
 
-        console.log(form);
-
-        handleProcessUpdate(new ProcessModel(process));
-
+        setForm({ name: '', burst: '', incomming: '' });
         handleClose();
     }
 
     return (
         <div className='buttons'>
             <FloatingLabel controlId="floatingInput" label="Segundos">
-                <Form.Control id="floatingInput" type="number" min="1" />
+                <Form.Control id="floatingInput" type="number" min="1" value={currentTimer} onChange={({target: {value}}) => handleTimerUpdate(parseInt(value))} />
             </FloatingLabel>
             <br />
             <Button variant="success" onClick={() => setShow(true)}>Agregar Proceso</Button>
@@ -48,6 +48,7 @@ const ProcessSettings = ({ handleProcessUpdate }: PropsHandler) => {
                             className="form-process-input"
                             name="name" type="text"
                             placeholder="Nombre Proceso"
+                            value={form.name}
                             onChange={handleChange}
                         />
 
@@ -55,20 +56,18 @@ const ProcessSettings = ({ handleProcessUpdate }: PropsHandler) => {
                             className="form-process-input"
                             name="burst" type="number"
                             placeholder="Rafaga"
+                            value={form.burst}
                             onChange={handleChange}
                         />
 
                         <Form.Control
                             className="form-process-input"
-                            name="incomingTime"
+                            name="incomming"
                             type="number"
                             placeholder="Tiempo llegada" min="0"
+                            value={form.incomming}
                             onChange={handleChange}
                         />
-                        <hr />
-                        <div className="form-process-buttons">
-
-                        </div>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
