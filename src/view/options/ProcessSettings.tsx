@@ -7,10 +7,12 @@ import Modal from "react-bootstrap/Modal";
 import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { PropsHandler } from "util/props";
 import { TimingContext } from "context/TimingContext";
+import { StartedProcessContext } from "context/StartedProcess";
 
 const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
+    const isStarted = useContext(StartedProcessContext);
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
@@ -83,7 +85,7 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
                 </Modal.Footer>
             </Modal>
 
-            <Button onClick={() => handleStartedProcessUpdate(true)}>Iniciar</Button>
+            <Button onClick={() => handleStartedProcessUpdate(!isStarted)} variant={isStarted? 'danger' : 'primary'}>{!isStarted? 'Iniciar' : 'Detener'}</Button>
         </div>
     );
 }

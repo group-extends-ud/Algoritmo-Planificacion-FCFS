@@ -27,12 +27,12 @@ export const usePlanificationSolver = ({ handleProcessUpdate, handleStartedProce
                 process.EndTime = process.StartTime + process.BurstTime;
                 process.TurnAroundTime = process.EndTime - process.CommingTime;
                 process.WaitingTime = process.TurnAroundTime - process.BurstTime;
+                handleStartedProcessUpdate(false);
                 handleProcessUpdate(process);
             } else {
-                handleStartedProcessUpdate(false);
                 setTimeout(() => {
-                    handleStartedProcessUpdate(true);
                     setCurrentProcess(currentProcess + 1);
+                    handleStartedProcessUpdate(true);
                 }, timer * 1000);
             }
         }
