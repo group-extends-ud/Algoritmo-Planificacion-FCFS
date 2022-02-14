@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { StartedProcessContext } from 'context/StartedProcess';
+import React, { useContext } from 'react';
 
 const Semaphore = () => {
-    const [isActive] = useState<boolean>(true);
+    const isStarted = useContext(StartedProcessContext);
     return (
-        <div className={`semaphore ${isActive? 'green' : 'red'}`}></div>
+        <div className={`semaphore ${!isStarted? 'green' : 'red'}`}></div>
     );
 }
 

@@ -1,34 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { PropsGantt } from 'util/props';
 import './gantt.css'
 
-import styled from 'styled-components';
 import { ProcessModel } from 'models/ProcessModel';
 
-const GanttDiagram = ({ processList, timer }: PropsGantt) => {
-    const totalTime = processList.reduce((max, process) => process.BurstTime > max ? process.BurstTime : max, 0);
+const GanttDiagram = ({ processList }: PropsGantt) => {
+    const totalTime = processList.reduce((max, process) => {
+        return process.EndTime > max ? process.EndTime : max;
+    }, 0);
 
-    const [completed, setCompleted] = useState(0);
-
-    const calcPercentage = (process: ProcessModel) => {
-        return (process.BurstTime / totalTime) * 100;
+    const calcPercentage = (time: number) => {
+        return (time / totalTime) * 100;
     }
 
     const getProgressBar = (process: ProcessModel) => {
-        const Div = styled.div`
-            width: ${calcPercentage(process)}%;
-            margin-bottom: 5px;
-        `;
         return (
-            <Div>
+            <ProgressBar>
                 <ProgressBar
-                key={process.Id}
-                variant="info"
-                now={process.TurnAroundTime !== -1? process.EndTime : completed}
-                label={process.Name}
-            />
-            </Div>
+                    animated
+                    variant="danger"
+                    now={process.TurnAroundTime !== -1? calcPercentage(process.CommingTime) : 0}
+                />
+                <ProgressBar
+                    animated
+                    variant="warning"
+                    now={process.TurnAroundTime !== -1? calcPercentage(process.WaitingTime) : 0}
+                />
+                <ProgressBar
+                    animated
+                    variant="success"
+                    now={process.TurnAroundTime !== -1? calcPercentage(process.BurstTime) : 0}
+                />
+            </ProgressBar>
         );
     }
 
@@ -39,21 +43,14 @@ const GanttDiagram = ({ processList, timer }: PropsGantt) => {
         }
         return times.length !== 1 ? times : [];
     }
-    useEffect(() => {
 
-        if (completed !== 100) {
-            setTimeout(() => {
-                setCompleted(completed + 1);
-            }, timer * 1000);
-        }
-    })
     return (
         <div className='gantt scrollable'>
             <div className="times">
                 {getTimes().map((time) => time)}
             </div>
-            <div className="lines">
-                {processList.map((process) => getProgressBar(process))}
+            <div className="line">
+                {processList.map((process) => <div className="line" key={process.Id}>{getProgressBar(process)}</div>)}
             </div>
         </div>
     );

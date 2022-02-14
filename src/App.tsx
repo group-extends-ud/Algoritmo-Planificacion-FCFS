@@ -5,17 +5,19 @@ import { LockProcessContext, queueLockedProcess } from 'context/LockContext';
 import { ComputedProcessContext, computedProcess } from 'context/ComputedContext';
 import { ProcessModel } from 'models/ProcessModel';
 import { initialTimer, TimingContext } from 'context/TimingContext';
+import { initialState, StartedProcessContext } from 'context/StartedProcess';
 
 const App = () => {
 
   const [lockedProcess, handleLockedProcess] = useState(queueLockedProcess);
   const [processList, handleProcess] = useState(computedProcess);
-  const [timer, setTimer] = useState(initialTimer);
+  const [timer, handleTimer] = useState(initialTimer);
+  const [startedProcess, handleStartedProcess] = useState(initialState);
 
   const setProcess = (process: ProcessModel) => {
     if (processList.includes(process)) {
       handleProcess(processList.map(p => {
-        if(p.Id === process.Id) {
+        if (p.Id === process.Id) {
           return process;
         }
         return p;
@@ -36,7 +38,9 @@ const App = () => {
     <ComputedProcessContext.Provider value={processList}>
       <LockProcessContext.Provider value={lockedProcess}>
         <TimingContext.Provider value={timer}>
-          <MainView handleProcessUpdate={setProcess} handleLockedProcessUpdate={setLockedProcess} handleTimerUpdate={setTimer} />
+          <StartedProcessContext.Provider value={startedProcess}>
+            <MainView handleProcessUpdate={setProcess} handleLockedProcessUpdate={setLockedProcess} handleTimerUpdate={handleTimer} handleStartedProcessUpdate={handleStartedProcess} />
+          </StartedProcessContext.Provider>
         </TimingContext.Provider>
       </LockProcessContext.Provider>
     </ComputedProcessContext.Provider>

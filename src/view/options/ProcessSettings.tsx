@@ -8,7 +8,7 @@ import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { PropsHandler } from "util/props";
 import { TimingContext } from "context/TimingContext";
 
-const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate }: PropsHandler) => {
+const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
 
@@ -83,7 +83,7 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate }: PropsHandle
                 </Modal.Footer>
             </Modal>
 
-            <Button>Iniciar</Button>
+            <Button onClick={() => handleStartedProcessUpdate(true)}>Iniciar</Button>
         </div>
     );
 }
