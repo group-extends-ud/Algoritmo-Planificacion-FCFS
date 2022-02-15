@@ -29,8 +29,13 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
     const handleSubmitProcess = (): void => {
         try {
             if (form.name !== '' && form.name !== undefined && form.name !== null) {
-                const latestIncommingProcess = getLastIncomming(processList);
-                if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null && parseInt(form.incomming) >= 0 && parseInt(form.incomming) >= latestIncommingProcess.CommingTime) {
+                if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null && parseInt(form.incomming) >= 0) {
+                    const latestIncommingProcess = getLastIncomming(processList);
+                    if(latestIncommingProcess) {
+                        if(parseInt(form.incomming) < latestIncommingProcess.CommingTime) {
+                            throw new Error('Incomming must be greater than the latest incomming process');
+                        }
+                    }
                     if (form.burst !== '' && form.burst !== undefined && form.burst !== null && parseInt(form.burst) >= 0) {
                         handleProcessUpdate(new ProcessModel(
                             new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
