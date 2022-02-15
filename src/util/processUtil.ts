@@ -13,3 +13,17 @@ export const getLastExecutedProcess = (processes: ProcessModel[]): ProcessModel 
 
     return highestEndTimeProcess;
 }
+
+export const getLastIncomming = (processes: ProcessModel[]): ProcessModel => {
+    let highestCommingTime = 0;
+    let highestCommingTimeProcess: ProcessModel = processes[0];
+
+    processes.forEach(process => {
+        if (process.CommingTime > highestCommingTime && process.CommingTime !== -1) {
+            highestCommingTime = process.CommingTime;
+            highestCommingTimeProcess = process;
+        }
+    });
+
+    return highestCommingTimeProcess;
+}
