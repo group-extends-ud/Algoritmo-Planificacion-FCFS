@@ -9,6 +9,8 @@ import { PropsHandler } from "util/props";
 import { TimingContext } from "context/TimingContext";
 import { StartedProcessContext } from "context/StartedProcess";
 
+import Swal from 'sweetalert2';
+
 const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
@@ -22,10 +24,26 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
         setForm({ ...form, [e.target.name]: e.target.value });
     };
     const handleSubmitProcess = (): void => {
+        try {
+            if (form.name !== '' && form.name !== undefined && form.name !== null) {
+                if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null) {
+                    if (form.burst !== '' && form.burst !== undefined && form.burst !== null && parseInt(form.burst) >= 0) {
+                        handleProcessUpdate(new ProcessModel(
+                            new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
+                        ));
+                    } else {
+                        throw new Error('Burst time must be a positive number');
+                    }
+                } else {
+                    throw new Error('Incomming time must be a positive number');
+                }
+            } else {
+                throw new Error('Name must be a string');
+            }
+        } catch (error: any) {
+            Swal.fire({ text: error.message, icon: 'error', });
 
-        handleProcessUpdate(new ProcessModel(
-            new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
-        ));
+        }
 
         setForm({ name: '', burst: '', incomming: '' });
         handleClose();
@@ -39,7 +57,7 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
     return (
         <div className='buttons'>
             <FloatingLabel controlId="floatingInput" label="Segundos">
-                <Form.Control id="floatingInput" type="number" min="1" value={currentTimer} onChange={({target: {value}}) => handleTimerUpdate(parseInt(value))} />
+                <Form.Control id="floatingInput" type="number" min="1" value={currentTimer} onChange={({ target: { value } }) => handleTimerUpdate(parseInt(value))} />
             </FloatingLabel>
             <br />
             <Button variant="success" onClick={() => setShow(true)}>Agregar Proceso</Button>
@@ -90,7 +108,7 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
                 </Modal.Footer>
             </Modal>
 
-            <Button onClick={initProcess} variant={isStarted? 'danger' : 'primary'}>{!isStarted? 'Iniciar' : 'Detener'}</Button>
+            <Button onClick={initProcess} variant={isStarted ? 'danger' : 'primary'}>{!isStarted ? 'Iniciar' : 'Detener'}</Button>
         </div>
     );
 }
