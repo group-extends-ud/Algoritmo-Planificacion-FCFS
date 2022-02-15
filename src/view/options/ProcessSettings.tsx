@@ -9,7 +9,7 @@ import { PropsHandler } from "util/props";
 import { TimingContext } from "context/TimingContext";
 import { StartedProcessContext } from "context/StartedProcess";
 
-const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate }: PropsHandler) => {
+const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
     const isStarted = useContext(StartedProcessContext);
@@ -29,6 +29,11 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
 
         setForm({ name: '', burst: '', incomming: '' });
         handleClose();
+    }
+
+    const initProcess = (): void => {
+        handleStartedProcessUpdate(!isStarted);
+        handleCurrentProcessUpdate(0);
     }
 
     return (
@@ -85,7 +90,7 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
                 </Modal.Footer>
             </Modal>
 
-            <Button onClick={() => handleStartedProcessUpdate(!isStarted)} variant={isStarted? 'danger' : 'primary'}>{!isStarted? 'Iniciar' : 'Detener'}</Button>
+            <Button onClick={initProcess} variant={isStarted? 'danger' : 'primary'}>{!isStarted? 'Iniciar' : 'Detener'}</Button>
         </div>
     );
 }

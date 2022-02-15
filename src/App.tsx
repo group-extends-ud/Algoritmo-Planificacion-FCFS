@@ -6,6 +6,7 @@ import { ComputedProcessContext, computedProcess } from 'context/ComputedContext
 import { ProcessModel } from 'models/ProcessModel';
 import { initialTimer, TimingContext } from 'context/TimingContext';
 import { initialState, StartedProcessContext } from 'context/StartedProcess';
+import { CurrentProcessContext, initialProcess } from 'context/CurrentProcessContext';
 
 const App = () => {
 
@@ -13,6 +14,7 @@ const App = () => {
   const [processList, handleProcess] = useState(computedProcess);
   const [timer, handleTimer] = useState(initialTimer);
   const [startedProcess, handleStartedProcess] = useState(initialState);
+  const [currentProcess, handleCurrentProcess] = useState(initialProcess);
 
   const setProcess = (process: ProcessModel) => {
     if (processList.includes(process)) {
@@ -24,15 +26,7 @@ const App = () => {
       }));
     } else {
       
-      handleProcess(processList.concat(process).sort((a, b) => {
-        if (a.CommingTime > b.CommingTime) {
-          return 1;
-        }
-        if (a.CommingTime < b.CommingTime) {
-          return -1;
-        }
-        return 0;
-      }));
+      handleProcess(processList.concat(process));
     }
   }
   const setLockedProcess = (process: ProcessModel) => {
@@ -48,7 +42,15 @@ const App = () => {
       <LockProcessContext.Provider value={lockedProcess}>
         <TimingContext.Provider value={timer}>
           <StartedProcessContext.Provider value={startedProcess}>
-            <MainView handleProcessUpdate={setProcess} handleLockedProcessUpdate={setLockedProcess} handleTimerUpdate={handleTimer} handleStartedProcessUpdate={handleStartedProcess} />
+            <CurrentProcessContext.Provider value={currentProcess}>
+            <MainView
+              handleProcessUpdate={setProcess}
+              handleLockedProcessUpdate={setLockedProcess}
+              handleTimerUpdate={handleTimer}
+              handleStartedProcessUpdate={handleStartedProcess}
+              handleCurrentProcessUpdate={handleCurrentProcess}
+              />
+            </CurrentProcessContext.Provider>
           </StartedProcessContext.Provider>
         </TimingContext.Provider>
       </LockProcessContext.Provider>

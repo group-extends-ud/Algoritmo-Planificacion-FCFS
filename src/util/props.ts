@@ -6,11 +6,13 @@ export type PropsHandler = {
     handleProcessUpdate: (process: ProcessModel) => void,
     handleTimerUpdate: (timer: number) => void,
     handleStartedProcessUpdate: (isStarted: boolean) => void,
+    handleCurrentProcessUpdate: (currentProcess: number) => void,
 };
 
 export type PropsTable = Props & {
     processList: ProcessModel[],
     lockedProcessList: ProcessModel[],
+    handleCurrentProcessUpdate: (currentProcess: number) => void,
 }
 
 export type PropsGantt = PropsTable & {
