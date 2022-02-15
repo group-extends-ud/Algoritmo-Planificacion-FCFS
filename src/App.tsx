@@ -24,15 +24,7 @@ const App = () => {
       }));
     } else {
       
-      handleProcess(processList.concat(process).sort((a, b) => {
-        if (a.CommingTime > b.CommingTime) {
-          return 1;
-        }
-        if (a.CommingTime < b.CommingTime) {
-          return -1;
-        }
-        return 0;
-      }));
+      handleProcess(processList.concat(process));
     }
   }
   const setLockedProcess = (process: ProcessModel) => {
