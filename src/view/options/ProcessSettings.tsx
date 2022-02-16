@@ -10,11 +10,14 @@ import { TimingContext } from "context/TimingContext";
 import { StartedProcessContext } from "context/StartedProcess";
 
 import Swal from 'sweetalert2';
+import { getLastIncomming } from "util/processUtil";
+import { ComputedProcessContext } from "context/ComputedContext";
 
 const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
     const isStarted = useContext(StartedProcessContext);
+    const processList = useContext(ComputedProcessContext);
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
@@ -26,7 +29,13 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
     const handleSubmitProcess = (): void => {
         try {
             if (form.name !== '' && form.name !== undefined && form.name !== null) {
-                if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null) {
+                if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null && parseInt(form.incomming) >= 0) {
+                    const latestIncommingProcess = getLastIncomming(processList);
+                    if(latestIncommingProcess) {
+                        if(parseInt(form.incomming) < latestIncommingProcess.CommingTime) {
+                            throw new Error('Incomming must be greater than the latest incomming process');
+                        }
+                    }
                     if (form.burst !== '' && form.burst !== undefined && form.burst !== null && parseInt(form.burst) >= 0) {
                         handleProcessUpdate(new ProcessModel(
                             new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
