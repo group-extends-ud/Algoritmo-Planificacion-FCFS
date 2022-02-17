@@ -20,7 +20,7 @@ export const usePlanificationSolver = (
     const timer = useContext(TimingContext);
     const currentProcess = useContext(CurrentProcessContext);
 
-    //const [waitTimeLocked, setWaitTime] = useState(0);
+    const [waitTimeLocked, setWaitTime] = useState(0);
 
     const TIMEOUT = timer * 1000;
 
@@ -35,15 +35,15 @@ export const usePlanificationSolver = (
                     } else {
                         process.StartTime = process.CommingTime;
                     }
-                    //process.StartTime += waitTimeLocked;
+                    process.StartTime += waitTimeLocked;
                     process.EndTime = process.StartTime + process.BurstTime;
                     process.TurnAroundTime = process.EndTime - process.CommingTime;
                     process.WaitingTime = (process.TurnAroundTime - process.BurstTime);
-                    //process.LockedTime = (waitTimeLocked === 0)?(-1):(waitTimeLocked);
+                    process.LockedTime = (waitTimeLocked === 0)?(-1):(waitTimeLocked);
                     setTimeout(() => {
                         handleStartedProcessUpdate(false);
                         handleProcessUpdate(process);
-                        //setWaitTime(0);
+                        setWaitTime(0);
                     }, TIMEOUT);
                 } else {
                     setTimeout(() => {
@@ -52,9 +52,9 @@ export const usePlanificationSolver = (
                     }, TIMEOUT);
                 }
             } else {
-                //setWaitTime(waitTimeLocked + 1);
-               /* setTimeout(() => {
-                }, TIMEOUT);*/
+                setTimeout(() => {
+                    setWaitTime(waitTimeLocked + 1);
+                }, TIMEOUT);
             }
         } else {
             handleStartedProcessUpdate(false);
