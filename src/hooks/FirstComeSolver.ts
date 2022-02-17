@@ -8,12 +8,19 @@ import { getLastExecutedProcess } from 'util/processUtil';
 import { LockProcessContext } from 'context/LockContext';
 import { CurrentProcessContext } from 'context/CurrentProcessContext';
 
-export const usePlanificationSolver = ({ handleProcessUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandler): void => {
+export const usePlanificationSolver = (
+    {   handleProcessUpdate, 
+        handleStartedProcessUpdate, 
+        handleCurrentProcessUpdate
+    }: PropsHandler): void => {
+
     const processList = useContext(ComputedProcessContext);
     const queueBlockedProcess = useContext(LockProcessContext);
     const isStarted = useContext(StartedProcessContext);
     const timer = useContext(TimingContext);
     const currentProcess = useContext(CurrentProcessContext);
+
+    const TIMEOUT = timer * 1000;
 
     if (isStarted) {
         const process = processList.at(currentProcess);
@@ -29,16 +36,16 @@ export const usePlanificationSolver = ({ handleProcessUpdate, handleStartedProce
                     process.EndTime = process.StartTime + process.BurstTime;
                     process.TurnAroundTime = process.EndTime - process.CommingTime;
                     process.WaitingTime = process.TurnAroundTime - process.BurstTime;
-                    handleStartedProcessUpdate(false);
-                    handleProcessUpdate(process);
+                    setTimeout(() => {
+                        handleStartedProcessUpdate(false);
+                        handleProcessUpdate(process);
+                    },TIMEOUT);
                 } else {
                     setTimeout(() => {
                         handleCurrentProcessUpdate(currentProcess + 1);
                         handleStartedProcessUpdate(true);
-                    }, timer * 1000);
+                    },TIMEOUT);
                 }
-            } else {
-                handleCurrentProcessUpdate(currentProcess + 1);
             }
         } else {
             handleStartedProcessUpdate(false);

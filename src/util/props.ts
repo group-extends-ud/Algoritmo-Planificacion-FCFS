@@ -2,11 +2,13 @@ import { ProcessModel } from "models/ProcessModel";
 import { PropsWithChildren, ReactNode } from "react";
 
 export type Props = PropsWithChildren<ReactNode>;
+
 export type PropsHandler = {
     handleProcessUpdate: (process: ProcessModel) => void,
     handleTimerUpdate: (timer: number) => void,
     handleStartedProcessUpdate: (isStarted: boolean) => void,
     handleCurrentProcessUpdate: (currentProcess: number) => void,
+    handleLockedProcessUpdate: (process: ProcessModel) => void,
 };
 
 export type PropsTable = Props & {

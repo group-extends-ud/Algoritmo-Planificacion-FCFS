@@ -6,7 +6,13 @@ import './table.css';
 import { PropsLocked, PropsTable } from 'util/props';
 import { ProcessModel } from 'models/ProcessModel';
 
-const ProcessTable = ({ processList, lockedProcessList, handleLockedProcessUpdate, handleCurrentProcessUpdate }: PropsTable & PropsLocked) => {
+const ProcessTable = (
+    {   processList, 
+        lockedProcessList, 
+        handleLockedProcessUpdate, 
+        handleCurrentProcessUpdate 
+    }: PropsTable & PropsLocked) => {
+    
     const isLocked = (process: ProcessModel) => lockedProcessList.includes(process);
 
     const blockProcess = (process: ProcessModel) => {
@@ -27,7 +33,6 @@ const ProcessTable = ({ processList, lockedProcessList, handleLockedProcessUpdat
                         <th>Tiempo de finalización</th>
                         <th>Tiempo de retorno</th>
                         <th>Tiempo de espera</th>
-                        <th>Bloquear Proceso</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,7 +46,6 @@ const ProcessTable = ({ processList, lockedProcessList, handleLockedProcessUpdat
                             <td>{process.EndTime === -1 ? '-' : process.EndTime}</td>
                             <td>{process.TurnAroundTime === -1 ? '-' : process.TurnAroundTime}</td>
                             <td>{process.WaitingTime === -1 ? '-' : process.WaitingTime}</td>
-                            <td><Button onClick={() => blockProcess(process)} variant={isLocked(process)? 'warning' : 'success'}>{isLocked(process)? 'Proceso Bloqueado' : 'Bloquear Proceso'}</Button></td>
                         </tr>
                     ))}
                 </tbody>

@@ -10,12 +10,25 @@ import { LockProcessContext } from 'context/LockContext';
 import { TimingContext } from 'context/TimingContext';
 import { usePlanificationSolver } from 'hooks/FirstComeSolver';
 
-const MainView = ({ handleProcessUpdate, handleLockedProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandlerComponent & PropsLocked) => {
+const MainView = (
+  { handleProcessUpdate, 
+    handleTimerUpdate, 
+    handleStartedProcessUpdate, 
+    handleCurrentProcessUpdate,
+    handleLockedProcessUpdate
+  }: PropsHandlerComponent & PropsLocked) => {
+
   const processList = useContext(ComputedProcessContext);
   const lockedProcessList = useContext(LockProcessContext);
   const timer = useContext(TimingContext);
 
-  usePlanificationSolver({ handleProcessUpdate, handleStartedProcessUpdate, handleTimerUpdate, handleCurrentProcessUpdate });
+  usePlanificationSolver({
+    handleProcessUpdate, 
+    handleStartedProcessUpdate, 
+    handleTimerUpdate, 
+    handleCurrentProcessUpdate,
+    handleLockedProcessUpdate 
+  });
 
   return (
     <div className='main'>
@@ -38,6 +51,7 @@ const MainView = ({ handleProcessUpdate, handleLockedProcessUpdate, handleTimerU
         handleTimerUpdate={handleTimerUpdate}
         handleStartedProcessUpdate={handleStartedProcessUpdate}
         handleCurrentProcessUpdate={handleCurrentProcessUpdate}
+        handleLockedProcessUpdate={handleLockedProcessUpdate}
       />
     </div>
   );

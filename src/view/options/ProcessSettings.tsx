@@ -3,24 +3,51 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Modal from "react-bootstrap/Modal";
+import Swal from 'sweetalert2';
 
 import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { PropsHandler } from "util/props";
+import { getLastIncomming } from "util/processUtil";
+
 import { TimingContext } from "context/TimingContext";
 import { StartedProcessContext } from "context/StartedProcess";
-
-import Swal from 'sweetalert2';
-import { getLastIncomming } from "util/processUtil";
+import { CurrentProcessContext } from "context/CurrentProcessContext";
 import { ComputedProcessContext } from "context/ComputedContext";
+import { LockProcessContext } from "context/LockContext";
 
-const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStartedProcessUpdate, handleCurrentProcessUpdate }: PropsHandler) => {
+const ProcessSettings = (
+    { handleProcessUpdate,
+        handleTimerUpdate,
+        handleStartedProcessUpdate,
+        handleCurrentProcessUpdate,
+        handleLockedProcessUpdate
+    }: PropsHandler) => {
 
     const currentTimer = useContext(TimingContext);
     const isStarted = useContext(StartedProcessContext);
     const processList = useContext(ComputedProcessContext);
+    const lockedProcessList = useContext(LockProcessContext);
+    const currentProcess = useContext(CurrentProcessContext);
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
+
+    const isLocked = (process: ProcessModel | undefined) => (process)?lockedProcessList.includes(process):false;
+
+    const blockProcess = () => {
+
+        const activeProcess = processList.at(currentProcess);
+        const nextProcess = processList.at(currentProcess+1);
+        if(activeProcess && nextProcess){
+
+            if(isLocked(activeProcess)){
+                handleLockedProcessUpdate(activeProcess);
+            }else{
+                handleLockedProcessUpdate(nextProcess);
+            }
+            
+        }
+    }
 
     const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '' });
     const handleChange = (e: any) => {
@@ -31,8 +58,8 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
             if (form.name !== '' && form.name !== undefined && form.name !== null) {
                 if (form.incomming !== '' && form.incomming !== undefined && form.incomming !== null && parseInt(form.incomming) >= 0) {
                     const latestIncommingProcess = getLastIncomming(processList);
-                    if(latestIncommingProcess) {
-                        if(parseInt(form.incomming) < latestIncommingProcess.CommingTime) {
+                    if (latestIncommingProcess) {
+                        if (parseInt(form.incomming) < latestIncommingProcess.CommingTime) {
                             throw new Error('Incomming must be greater than the latest incomming process');
                         }
                     }
@@ -65,11 +92,21 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
 
     return (
         <div className='buttons'>
-            <FloatingLabel controlId="floatingInput" label="Segundos">
-                <Form.Control id="floatingInput" type="number" min="1" value={currentTimer} onChange={({ target: { value } }) => handleTimerUpdate(parseInt(value))} />
-            </FloatingLabel>
+
+            <Form.Control
+                id="floatingInput"
+                type="number" min="1"
+                value={currentTimer}
+                onChange={({ target: { value } }) => handleTimerUpdate(parseInt(value))}
+            />
             <br />
-            <Button variant="success" onClick={() => setShow(true)}>Agregar Proceso</Button>
+
+            <Button
+                onClick={() => setShow(true)}
+                variant="success"
+            >
+                Agregar Proceso
+            </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -117,7 +154,19 @@ const ProcessSettings = ({ handleProcessUpdate, handleTimerUpdate, handleStarted
                 </Modal.Footer>
             </Modal>
 
-            <Button onClick={initProcess} variant={isStarted ? 'danger' : 'primary'}>{!isStarted ? 'Iniciar' : 'Detener'}</Button>
+            <Button
+                onClick={initProcess}
+                variant={isStarted ? 'danger' : 'primary'}
+            >
+                {!isStarted ? 'Iniciar' : 'Detener'}
+            </Button>
+
+            <Button
+                onClick={() => blockProcess()}
+                variant={isLocked(processList.at(currentProcess)) ? 'warning' : 'success'}
+            >
+                {isLocked(processList.at(currentProcess)) ? 'Desbloquear Bloqueado' : 'Bloquear Proceso'}
+            </Button>
         </div>
     );
 }
