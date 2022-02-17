@@ -36,7 +36,6 @@ const MainView = (
         <ProcessTable
           lockedProcessList={lockedProcessList}
           processList={processList}
-          handleLockedProcessUpdate={handleLockedProcessUpdate}
           handleCurrentProcessUpdate={handleCurrentProcessUpdate}
         />
         <GanttDiagram

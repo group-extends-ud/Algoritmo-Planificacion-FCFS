@@ -1,24 +1,11 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import './table.css';
 
-import { PropsLocked, PropsTable } from 'util/props';
+import { PropsTable } from 'util/props';
 import { ProcessModel } from 'models/ProcessModel';
 
-const ProcessTable = (
-    {   processList, 
-        lockedProcessList, 
-        handleLockedProcessUpdate, 
-        handleCurrentProcessUpdate 
-    }: PropsTable & PropsLocked) => {
-    
-    const isLocked = (process: ProcessModel) => lockedProcessList.includes(process);
-
-    const blockProcess = (process: ProcessModel) => {
-        handleLockedProcessUpdate(process);
-        handleCurrentProcessUpdate(0);
-    }
+const ProcessTable = ({ processList }: PropsTable) => {
 
     return (
         <div className='table-container scrollable'>
@@ -33,6 +20,7 @@ const ProcessTable = (
                         <th>Tiempo de finalización</th>
                         <th>Tiempo de retorno</th>
                         <th>Tiempo de espera</th>
+                        {/*<th>Tiempo Bloqueado</th>*/}
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +34,7 @@ const ProcessTable = (
                             <td>{process.EndTime === -1 ? '-' : process.EndTime}</td>
                             <td>{process.TurnAroundTime === -1 ? '-' : process.TurnAroundTime}</td>
                             <td>{process.WaitingTime === -1 ? '-' : process.WaitingTime}</td>
+                            
                         </tr>
                     ))}
                 </tbody>

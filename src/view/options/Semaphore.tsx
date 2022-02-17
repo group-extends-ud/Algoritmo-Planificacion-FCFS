@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 const Semaphore = () => {
     const isStarted = useContext(StartedProcessContext);
     return (
-        <div className={`semaphore ${isStarted? 'green' : 'red'}`}></div>
+        <div className={`semaphore ${!isStarted? 'green' : 'red'}`}></div>
     );
 }
 

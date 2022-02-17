@@ -6,6 +6,10 @@ table tbody tr td {
     text-align: center;
 }
 
+table tbody tr{
+    cursor: context-menu;
+}
+
 table tbody tr:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.13);
 }

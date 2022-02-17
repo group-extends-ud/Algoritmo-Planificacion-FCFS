@@ -3,7 +3,6 @@
     flex-direction: column;
     justify-content:flex-start;
     padding:5% 5%;
-    border:1px solid black;
 }
 
 .semaphore {
@@ -11,6 +10,7 @@
     height: 15%;
     border-radius: 100%;
     align-self: center;
+    border: 1px solid black;
     /*border: 2px solid black;*/
 }
 

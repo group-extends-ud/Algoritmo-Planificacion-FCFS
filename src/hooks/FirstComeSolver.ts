@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { ComputedProcessContext } from 'context/ComputedContext';
 import { PropsHandler } from 'util/props';
@@ -9,8 +9,8 @@ import { LockProcessContext } from 'context/LockContext';
 import { CurrentProcessContext } from 'context/CurrentProcessContext';
 
 export const usePlanificationSolver = (
-    {   handleProcessUpdate, 
-        handleStartedProcessUpdate, 
+    { handleProcessUpdate,
+        handleStartedProcessUpdate,
         handleCurrentProcessUpdate
     }: PropsHandler): void => {
 
@@ -20,32 +20,41 @@ export const usePlanificationSolver = (
     const timer = useContext(TimingContext);
     const currentProcess = useContext(CurrentProcessContext);
 
+    //const [waitTimeLocked, setWaitTime] = useState(0);
+
     const TIMEOUT = timer * 1000;
 
     if (isStarted) {
         const process = processList.at(currentProcess);
         if (process && currentProcess < processList.length) {
-            if(!queueBlockedProcess.includes(process)) {
+            if (!queueBlockedProcess.includes(process)) {
                 if (process.StartTime === -1) {
                     const lastProcess = getLastExecutedProcess(processList);
-                        if (lastProcess) {
-                            process.StartTime = Math.max(process.CommingTime, lastProcess.EndTime);
-                        } else {
-                            process.StartTime = process.CommingTime;
-                        }
+                    if (lastProcess) {
+                        process.StartTime = Math.max(process.CommingTime, lastProcess.EndTime);
+                    } else {
+                        process.StartTime = process.CommingTime;
+                    }
+                    //process.StartTime += waitTimeLocked;
                     process.EndTime = process.StartTime + process.BurstTime;
                     process.TurnAroundTime = process.EndTime - process.CommingTime;
-                    process.WaitingTime = process.TurnAroundTime - process.BurstTime;
+                    process.WaitingTime = (process.TurnAroundTime - process.BurstTime);
+                    //process.LockedTime = (waitTimeLocked === 0)?(-1):(waitTimeLocked);
                     setTimeout(() => {
                         handleStartedProcessUpdate(false);
                         handleProcessUpdate(process);
-                    },TIMEOUT);
+                        //setWaitTime(0);
+                    }, TIMEOUT);
                 } else {
                     setTimeout(() => {
                         handleCurrentProcessUpdate(currentProcess + 1);
                         handleStartedProcessUpdate(true);
-                    },TIMEOUT);
+                    }, TIMEOUT);
                 }
+            } else {
+                //setWaitTime(waitTimeLocked + 1);
+               /* setTimeout(() => {
+                }, TIMEOUT);*/
             }
         } else {
             handleStartedProcessUpdate(false);

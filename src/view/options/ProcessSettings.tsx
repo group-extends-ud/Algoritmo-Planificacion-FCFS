@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Modal from "react-bootstrap/Modal";
 import Swal from 'sweetalert2';
 
@@ -39,13 +38,13 @@ const ProcessSettings = (
         const activeProcess = processList.at(currentProcess);
         const nextProcess = processList.at(currentProcess+1);
         if(activeProcess && nextProcess){
-
             if(isLocked(activeProcess)){
-                handleLockedProcessUpdate(activeProcess);
-            }else{
-                handleLockedProcessUpdate(nextProcess);
+                handleLockedProcessUpdate(activeProcess!);
             }
-            
+            else{
+                handleLockedProcessUpdate(nextProcess!);
+            }
+            handleCurrentProcessUpdate(0);
         }
     }
 
@@ -156,14 +155,14 @@ const ProcessSettings = (
 
             <Button
                 onClick={initProcess}
-                variant={isStarted ? 'danger' : 'primary'}
+                variant={isStarted ? 'secondary' : 'primary'}
             >
                 {!isStarted ? 'Iniciar' : 'Detener'}
             </Button>
 
             <Button
                 onClick={() => blockProcess()}
-                variant={isLocked(processList.at(currentProcess)) ? 'warning' : 'success'}
+                variant={isLocked(processList.at(currentProcess)) ? 'warning' : 'danger'}
             >
                 {isLocked(processList.at(currentProcess)) ? 'Desbloquear Bloqueado' : 'Bloquear Proceso'}
             </Button>

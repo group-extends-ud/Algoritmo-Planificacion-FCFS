@@ -20,17 +20,17 @@ const GanttDiagram = ({ processList }: PropsGantt) => {
                 <ProgressBar
                     animated
                     variant="danger"
-                    now={process.TurnAroundTime !== -1? calcPercentage(process.CommingTime) : 0}
+                    now={process.EndTime !== -1? calcPercentage(process.CommingTime) : 0}
                 />
                 <ProgressBar
                     animated
                     variant="warning"
-                    now={process.TurnAroundTime !== -1? calcPercentage(process.WaitingTime) : 0}
+                    now={process.EndTime !== -1? calcPercentage(process.WaitingTime) : 0}
                 />
                 <ProgressBar
                     animated
                     variant="success"
-                    now={process.TurnAroundTime !== -1? calcPercentage(process.BurstTime) : 0}
+                    now={process.EndTime !== -1? calcPercentage(process.BurstTime) : 0}
                 />
             </ProgressBar>
         );
