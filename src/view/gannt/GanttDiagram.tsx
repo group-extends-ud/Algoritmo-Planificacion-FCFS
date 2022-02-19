@@ -4,8 +4,11 @@ import { PropsGantt } from 'util/props';
 import './gantt.css'
 
 import { ProcessModel } from 'models/ProcessModel';
+import { useAppSelector } from 'hooks/redux';
 
-const GanttDiagram = ({ processList }: PropsGantt) => {
+const GanttDiagram = () => {
+    const processList = useAppSelector(({ computedProcess:{ value } }) => value );
+    
     const totalTime = processList.reduce((max, process) => {
         return process.EndTime > max ? process.EndTime : max;
     }, 0);

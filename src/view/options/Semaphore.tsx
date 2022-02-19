@@ -1,10 +1,10 @@
-import { StartedProcessContext } from 'context/StartedProcess';
-import React, { useContext } from 'react';
+import { useAppSelector } from 'hooks/redux';
+import React from 'react';
 
 const Semaphore = () => {
-    const isStarted = useContext(StartedProcessContext);
+    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value );
     return (
-        <div className={`semaphore ${!isStarted? 'green' : 'red'}`}></div>
+        <div className={`semaphore ${!algorithmStatus? 'green' : 'red'}`}></div>
     );
 }
 

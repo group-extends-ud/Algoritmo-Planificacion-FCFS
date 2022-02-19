@@ -1,51 +1,38 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Swal from 'sweetalert2';
 
 import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
-import { PropsHandler } from "util/props";
 import { getLastIncomming } from "util/processUtil";
 
-import { TimingContext } from "context/TimingContext";
-import { StartedProcessContext } from "context/StartedProcess";
-import { CurrentProcessContext } from "context/CurrentProcessContext";
-import { ComputedProcessContext } from "context/ComputedContext";
-import { LockProcessContext } from "context/LockContext";
+import { addProcess } from 'util/store/computedProcess';
+import { updateLockedStatus } from 'util/store/currentProcess';
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { setAlgorithmStatus } from "util/store/algorithmStatus";
+import { updateTimer } from "util/store/timer";
 
-const ProcessSettings = (
-    { handleProcessUpdate,
-        handleTimerUpdate,
-        handleStartedProcessUpdate,
-        handleCurrentProcessUpdate,
-        handleLockedProcessUpdate
-    }: PropsHandler) => {
 
-    const currentTimer = useContext(TimingContext);
-    const isStarted = useContext(StartedProcessContext);
-    const processList = useContext(ComputedProcessContext);
-    const lockedProcessList = useContext(LockProcessContext);
-    const currentProcess = useContext(CurrentProcessContext);
+const ProcessSettings = () => {
+
+    const processList = useAppSelector(({ computedProcess: { value } }) => value );
+    const currentProcess = useAppSelector(({ currentProcess: { value } }) => value );
+    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value );
+    const timer = useAppSelector(({ timer: { value } }) => value );
+
+
+    const dispatch = useAppDispatch();
 
     const [show, setShow] = useState<boolean>(false);
     const handleClose = () => setShow(false);
 
-    const isLocked = (process: ProcessModel | undefined) => (process)?lockedProcessList.includes(process):false;
-
     const blockProcess = () => {
-
-        const activeProcess = processList.at(currentProcess);
-        const nextProcess = processList.at(currentProcess+1);
-        if(activeProcess && nextProcess){
-            if(isLocked(activeProcess)){
-                handleLockedProcessUpdate(activeProcess!);
-            }
-            else{
-                handleLockedProcessUpdate(nextProcess!);
-            }
-            handleCurrentProcessUpdate(0);
-        }
+        dispatch(
+            updateLockedStatus(
+                !currentProcess.isBlocked
+            )
+        )
     }
 
     const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '' });
@@ -63,9 +50,13 @@ const ProcessSettings = (
                         }
                     }
                     if (form.burst !== '' && form.burst !== undefined && form.burst !== null && parseInt(form.burst) >= 0) {
-                        handleProcessUpdate(new ProcessModel(
-                            new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
-                        ));
+                        dispatch(
+                            addProcess(
+                                new ProcessModel(
+                                    new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
+                                )
+                            )
+                        );
                     } else {
                         throw new Error('Burst time must be a positive number');
                     }
@@ -85,8 +76,11 @@ const ProcessSettings = (
     }
 
     const initProcess = (): void => {
-        handleStartedProcessUpdate(!isStarted);
-        handleCurrentProcessUpdate(0);
+        dispatch(
+            setAlgorithmStatus(
+                !algorithmStatus
+            )
+        )
     }
 
     return (
@@ -95,8 +89,8 @@ const ProcessSettings = (
             <Form.Control
                 id="floatingInput"
                 type="number" min="1"
-                value={currentTimer}
-                onChange={({ target: { value } }) => handleTimerUpdate(parseInt(value))}
+                value={timer}
+                onChange={({ target: { value } }) => dispatch(updateTimer(parseInt(value)))}
             />
             <br />
 
@@ -155,16 +149,16 @@ const ProcessSettings = (
 
             <Button
                 onClick={initProcess}
-                variant={isStarted ? 'secondary' : 'primary'}
+                variant={algorithmStatus ? 'secondary' : 'primary'}
             >
-                {!isStarted ? 'Iniciar' : 'Detener'}
+                {!algorithmStatus ? 'Iniciar' : 'Detener'}
             </Button>
 
             <Button
                 onClick={() => blockProcess()}
-                variant={isLocked(processList.at(currentProcess)) ? 'warning' : 'danger'}
+                variant={currentProcess.isBlocked? 'warning' : 'danger'}
             >
-                {isLocked(processList.at(currentProcess)) ? 'Desbloquear Bloqueado' : 'Bloquear Proceso'}
+                {currentProcess.isBlocked? 'Desbloquear Bloqueado' : 'Bloquear Proceso'}
             </Button>
         </div>
     );

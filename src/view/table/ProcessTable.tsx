@@ -2,10 +2,13 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import './table.css';
 
-import { PropsTable } from 'util/props';
 import { ProcessModel } from 'models/ProcessModel';
+import { useAppSelector } from 'hooks/redux';
 
-const ProcessTable = ({ processList }: PropsTable) => {
+
+const ProcessTable = () => {
+
+    const processList = useAppSelector(({ computedProcess:{ value } }) => value );
 
     return (
         <div className='table-container scrollable'>
@@ -20,7 +23,6 @@ const ProcessTable = ({ processList }: PropsTable) => {
                         <th>Tiempo de finalización</th>
                         <th>Tiempo de retorno</th>
                         <th>Tiempo de espera</th>
-                        {/*<th>Tiempo Bloqueado</th>*/}
                     </tr>
                 </thead>
                 <tbody>

@@ -26,3 +26,8 @@ export type PropsHandlerComponent = Props & PropsHandler;
 export type PropsLocked = Props & {
     handleLockedProcessUpdate: (process: ProcessModel) => void,
 }
+
+export type CurrentProcess = {
+    isBlocked:boolean,
+    currentProcess:ProcessModel | undefined
+}
