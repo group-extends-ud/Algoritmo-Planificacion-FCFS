@@ -11,11 +11,11 @@ const computedProcessSlice = createSlice({
         ]
     },
     reducers:{
-        addProcess({ value },{payload}: PayloadAction<ProcessModel>){
-            value.push(payload);
+        addProcess(state,{payload}: PayloadAction<ProcessModel>){
+            state.value.push(payload);
         },
-        updateProcess({ value }, { payload }: PayloadAction<ProcessModel>) {
-            value = value.map((process) => {
+        updateProcess(state, { payload }: PayloadAction<ProcessModel>) {
+            state.value = state.value.map((process) => {
                 if(process.Id === payload.Id) {
                     return payload;
                 }

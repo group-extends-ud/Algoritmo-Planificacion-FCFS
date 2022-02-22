@@ -6,8 +6,8 @@ const timerSlice = createSlice({
         value:0
     },
     reducers:{
-        updateTimer({ value },{payload}: PayloadAction<number>){
-            value = payload;
+        updateTimer(state,{payload}: PayloadAction<number>){
+            state.value = payload;
         }
     }
 });

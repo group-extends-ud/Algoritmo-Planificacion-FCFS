@@ -6,8 +6,8 @@ const algorithmStatusSlice = createSlice({
         value: false
     },
     reducers:{
-        setAlgorithmStatus({ value }, { payload }: PayloadAction<boolean>){
-            value = payload;
+        setAlgorithmStatus(state, { payload }: PayloadAction<boolean>){
+            state.value = payload;
         },
     }
 });

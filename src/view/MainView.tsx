@@ -14,9 +14,9 @@ const MainView = () => {
     <div className='main'>
       <div className='process-container'>
         <ProcessTable />
-        <GanttDiagram/>
+        <GanttDiagram />
       </div>
-      <Options/>
+      <Options />
     </div>
   );
 }

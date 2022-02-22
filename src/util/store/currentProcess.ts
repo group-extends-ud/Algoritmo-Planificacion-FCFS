@@ -11,12 +11,12 @@ const currentProcessSlice = createSlice({
         } as CurrentProcess
     },
     reducers:{
-        setCurrentProcess({ value },{ payload }: PayloadAction<ProcessModel | undefined>){
-            value.currentProcess = payload;
+        setCurrentProcess(state,{ payload }: PayloadAction<ProcessModel | undefined>){
+            state.value.currentProcess = payload;
         },
-        updateLockedStatus({ value },{ payload }: PayloadAction<boolean>){
-            if(value.currentProcess)
-                value.isBlocked = payload;
+        updateLockedStatus(state,{ payload }: PayloadAction<boolean>){
+            if(state.value.currentProcess)
+                state.value.isBlocked = payload;
         }
     }
 });

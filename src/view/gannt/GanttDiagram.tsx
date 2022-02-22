@@ -1,6 +1,5 @@
 import React from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import { PropsGantt } from 'util/props';
 import './gantt.css'
 
 import { ProcessModel } from 'models/ProcessModel';
@@ -53,7 +52,7 @@ const GanttDiagram = () => {
                 {getTimes().map((time) => time)}
             </div>
             <div className="line">
-                {processList.map((process) => <div className="line" key={process.Id}>{getProgressBar(process)}</div>)}
+                {processList.map((process) => <div className="line" key={process.Id}>{process.EndTime !== -1?  getProgressBar(process) : undefined}</div>)}
             </div>
         </div>
     );

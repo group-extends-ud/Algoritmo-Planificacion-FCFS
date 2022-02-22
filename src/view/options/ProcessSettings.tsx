@@ -8,7 +8,7 @@ import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { getLastIncomming } from "util/processUtil";
 
 import { addProcess } from 'util/store/computedProcess';
-import { updateLockedStatus } from 'util/store/currentProcess';
+import { setCurrentProcess, updateLockedStatus } from 'util/store/currentProcess';
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { setAlgorithmStatus } from "util/store/algorithmStatus";
 import { updateTimer } from "util/store/timer";
@@ -76,6 +76,13 @@ const ProcessSettings = () => {
     }
 
     const initProcess = (): void => {
+        if(!currentProcess.currentProcess) {
+            dispatch(
+                setCurrentProcess(
+                    processList.at(0)
+                )
+            );
+        }
         dispatch(
             setAlgorithmStatus(
                 !algorithmStatus

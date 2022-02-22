@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getLastExecutedProcess } from 'util/processUtil';
 import { setAlgorithmStatus } from 'util/store/algorithmStatus';
 import { updateProcess } from 'util/store/computedProcess';
@@ -7,10 +7,10 @@ import { useAppSelector, useAppDispatch } from './redux';
 
 export const usePlanificationSolver = (): void => {
 
-    const processList = useAppSelector(({ computedProcess: { value } }) => value );
-    const { currentProcess, isBlocked } = useAppSelector(({ currentProcess: { value } }) => value );
-    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value );
-    const timer = useAppSelector(({ timer: { value } }) => value );
+    const processList = useAppSelector(({ computedProcess: { value } }) => value);
+    const { currentProcess, isBlocked } = useAppSelector(({ currentProcess: { value } }) => value);
+    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value);
+    const timer = useAppSelector(({ timer: { value } }) => value);
 
 
     const dispatch = useAppDispatch();
@@ -19,22 +19,23 @@ export const usePlanificationSolver = (): void => {
 
     const TIMEOUT = timer * 1000;
 
-    if (algorithmStatus) {
-        if (currentProcess) {
-            if (!isBlocked) {
-                if (currentProcess.StartTime === -1) {
-                    const lastProcess = getLastExecutedProcess(processList);
-                    if (lastProcess) {
-                        currentProcess.StartTime = Math.max(currentProcess.CommingTime, lastProcess.EndTime);
-                    } else {
-                        currentProcess.StartTime = currentProcess.CommingTime;
-                    }
-                    currentProcess.StartTime += waitTimeLocked;
-                    currentProcess.EndTime = currentProcess.StartTime + currentProcess.BurstTime;
-                    currentProcess.TurnAroundTime = currentProcess.EndTime - currentProcess.CommingTime;
-                    currentProcess.WaitingTime = (currentProcess.TurnAroundTime - currentProcess.BurstTime);
-                    currentProcess.LockedTime = (waitTimeLocked === 0)?(-1):(waitTimeLocked);
-                    setTimeout(() => {
+
+    useEffect(() => {
+        if (algorithmStatus) {
+            if (currentProcess) {
+                if (!isBlocked) {
+                    if (currentProcess.StartTime === -1) {
+                        const lastProcess = getLastExecutedProcess(processList);
+                        if (lastProcess) {
+                            currentProcess.StartTime = Math.max(currentProcess.CommingTime, lastProcess.EndTime);
+                        } else {
+                            currentProcess.StartTime = currentProcess.CommingTime;
+                        }
+                        currentProcess.StartTime += waitTimeLocked;
+                        currentProcess.EndTime = currentProcess.StartTime + currentProcess.BurstTime;
+                        currentProcess.TurnAroundTime = currentProcess.EndTime - currentProcess.CommingTime;
+                        currentProcess.WaitingTime = (currentProcess.TurnAroundTime - currentProcess.BurstTime);
+                        currentProcess.LockedTime = (waitTimeLocked === 0) ? (-1) : (waitTimeLocked);
                         dispatch(
                             setAlgorithmStatus(
                                 false
@@ -46,29 +47,38 @@ export const usePlanificationSolver = (): void => {
                             )
                         );
                         setWaitTime(0);
-                    }, TIMEOUT);
+                        setTimeout(() => {
+                            dispatch(
+                                setAlgorithmStatus(
+                                    true
+                                )
+                            );
+                        }, TIMEOUT);
+                    } else {
+                
+                        setTimeout(() => {
+                            const nextProcessIndex = processList.indexOf(currentProcess) + 1;
+                    
+                            dispatch(
+                                setCurrentProcess(
+                                    processList.at(nextProcessIndex)
+                                )
+                            );
+                            dispatch(
+                                setAlgorithmStatus(true)
+                            );
+                        }, TIMEOUT);
+                    }
                 } else {
                     setTimeout(() => {
-                        const nextProcessIndex = processList.indexOf(currentProcess) + 1;
-                        dispatch(
-                            setCurrentProcess(
-                                processList.at(nextProcessIndex)
-                            )
-                        );
-                        dispatch(
-                            setAlgorithmStatus(true)
-                        );
+                        setWaitTime(waitTimeLocked + 1);
                     }, TIMEOUT);
                 }
             } else {
-                setTimeout(() => {
-                    setWaitTime(waitTimeLocked + 1);
-                }, TIMEOUT);
+                dispatch(
+                    setAlgorithmStatus(false)
+                );
             }
-        } else {
-            dispatch(
-                setAlgorithmStatus(false)
-            );
         }
-    }
+    }, [algorithmStatus, currentProcess, isBlocked, processList, waitTimeLocked, dispatch, TIMEOUT]);
 }
