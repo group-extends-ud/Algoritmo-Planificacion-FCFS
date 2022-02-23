@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const timerSlice = createSlice({
     name:'timer',
     initialState:{
-        value:0
+        value:2
     },
     reducers:{
         updateTimer(state,{payload}: PayloadAction<number>){
