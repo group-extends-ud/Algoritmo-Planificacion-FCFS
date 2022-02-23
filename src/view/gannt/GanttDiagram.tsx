@@ -16,24 +16,31 @@ const GanttDiagram = () => {
         return (time / totalTime) * 100;
     }
 
+    const drawMiniBar = (process: ProcessModel) => {
+        const processArray = [];
+        for(let processInstant in process.StatusProcess) {
+            processArray.push({
+                variant: !process.StatusProcess[processInstant].wasLocked? 'success' : 'warning',
+                now: calcPercentage(process.StatusProcess[processInstant].relativeStartTime),
+            });
+        }
+        return processArray;
+    }
+
     const getProgressBar = (process: ProcessModel) => {
         return (
             <ProgressBar>
                 <ProgressBar
                     animated
                     variant="danger"
-                    now={process.EndTime !== -1? calcPercentage(process.CommingTime) : 0}
+                    now={calcPercentage(process.CommingTime)}
                 />
                 <ProgressBar
                     animated
                     variant="warning"
-                    now={process.EndTime !== -1? calcPercentage(process.WaitingTime) : 0}
+                    now={calcPercentage(process.StartTime - process.CommingTime)}
                 />
-                <ProgressBar
-                    animated
-                    variant="success"
-                    now={process.EndTime !== -1? calcPercentage(process.BurstTime) : 0}
-                />
+                {drawMiniBar(process).map((bar, index) => <ProgressBar animated key={index} variant={bar.variant} now={bar.now} />)}
             </ProgressBar>
         );
     }
@@ -51,13 +58,9 @@ const GanttDiagram = () => {
             <div className="times">
                 {getTimes().map((time) => time)}
             </div>
-            {/*<div className="line">
+            <div className="line">
                 {processList.map((process) => <div className="line" key={process.Id}>{process.EndTime !== -1?  getProgressBar(process) : undefined}</div>)}
-            </div>*/}
-            <div>
-                {processList.map((process) => <p key={process.Id}>{process.Name} = {JSON.stringify(process.StatusProcess)}<br></br></p>)}
             </div>
-
         </div>
     );
 }

@@ -50,21 +50,25 @@ export const usePlanificationSolver = (): void => {
                             currentProcess.StartTime = currentProcess.CommingTime;
                         }
 
-                        currentProcess.StartTime += waitTimeLocked;
+                        const tempRelativeTime = (!currentProcess.StatusProcess?.[startProcessTime]?.wasLocked? startProcessTime : currentProcess.StatusProcess[startProcessTime].relativeStartTime);
 
                         currentProcess.StatusProcess= {
                             ...currentProcess.StatusProcess,
-                            [startProcessTime]:{
-                                'relativeStartTime':calculateTotalTimeExecution(currentProcess,startProcessTime),
-                                'wasLocked':waitTimeLocked !== 0
+                            [tempRelativeTime]:{
+                                'relativeStartTime':calculateTotalTimeExecution(currentProcess,tempRelativeTime),
+                                'wasLocked':false
                             }
                         };
 
-                        if(countTimeExecution(currentProcess,false) === currentProcess.BurstTime){
-                            currentProcess.EndTime = currentProcess.StartTime + currentProcess.BurstTime;
+                        if(countTimeExecution(currentProcess,false) === currentProcess.BurstTime) {
+                            currentProcess.EndTime = currentProcess.StartTime + currentProcess.BurstTime + countTimeExecution(currentProcess,true);
                             currentProcess.TurnAroundTime = currentProcess.EndTime - currentProcess.CommingTime;
-                            currentProcess.WaitingTime = (currentProcess.TurnAroundTime - currentProcess.BurstTime) + countTimeExecution(currentProcess,true);
+                            currentProcess.WaitingTime = (currentProcess.TurnAroundTime - currentProcess.BurstTime);
                             currentProcess.LockedTime = (waitTimeLocked === 0) ? (-1) : (waitTimeLocked);
+                        }
+
+                        if(waitTimeLocked !== 0) {
+                            setStartProcessTime(tempRelativeTime);
                         }
 
                         dispatch(
@@ -102,21 +106,26 @@ export const usePlanificationSolver = (): void => {
                         }
                     }
                 } else {
-                    const tempRelativeTime = (currentProcess.StatusProcess[startProcessTime].relativeStartTime);
-
+                    const tempRelativeTime = (currentProcess.StatusProcess[startProcessTime].wasLocked? startProcessTime : currentProcess.StatusProcess[startProcessTime].relativeStartTime);
                     currentProcess.StatusProcess = {
                         ...currentProcess.StatusProcess,
                         [tempRelativeTime]:{
-                            'relativeStartTime':calculateTotalTimeExecution(currentProcess,tempRelativeTime),
+                            'relativeStartTime':waitTimeLocked,
                             'wasLocked':true
                         }
                     };
 
                     setTimeout(() => {
+                        if(waitTimeLocked === 0) {
+                            setStartProcessTime(tempRelativeTime);
+                        }
                         setWaitTime(waitTimeLocked + 1);
+                        dispatch(
+                            updateProcess(
+                                currentProcess
+                            )
+                        );
                     }, TIMEOUT);
-
-                    setStartProcessTime(tempRelativeTime);
                 }
             } else {
                 dispatch(
@@ -124,5 +133,5 @@ export const usePlanificationSolver = (): void => {
                 );
             }
         }
-    }, [algorithmStatus, currentProcess, isBlocked, processList, waitTimeLocked, dispatch, TIMEOUT]);
+    }, [startProcessTime, algorithmStatus, currentProcess, isBlocked, processList, waitTimeLocked, dispatch, TIMEOUT]);
 }
