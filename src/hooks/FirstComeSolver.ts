@@ -50,7 +50,7 @@ export const usePlanificationSolver = (): void => {
                             currentProcess.StartTime = currentProcess.CommingTime;
                         }
 
-                        const tempRelativeTime = (!currentProcess.StatusProcess?.[startProcessTime]?.wasLocked? startProcessTime : currentProcess.StatusProcess[startProcessTime].relativeStartTime);
+                        const tempRelativeTime = (!currentProcess.StatusProcess?.[startProcessTime]?.wasLocked? startProcessTime : startProcessTime + currentProcess.StatusProcess[startProcessTime].relativeStartTime);
 
                         currentProcess.StatusProcess= {
                             ...currentProcess.StatusProcess,
@@ -93,6 +93,8 @@ export const usePlanificationSolver = (): void => {
                         if(currentProcess.EndTime !== -1){
                             setTimeout(() => {
                                 const nextProcessIndex = processList.indexOf(currentProcess) + 1;
+
+                                setStartProcessTime(0);
                         
                                 dispatch(
                                     setCurrentProcess(
@@ -106,7 +108,7 @@ export const usePlanificationSolver = (): void => {
                         }
                     }
                 } else {
-                    const tempRelativeTime = (currentProcess.StatusProcess[startProcessTime].wasLocked? startProcessTime : currentProcess.StatusProcess[startProcessTime].relativeStartTime);
+                    const tempRelativeTime = (currentProcess.StatusProcess[startProcessTime].wasLocked? startProcessTime : startProcessTime + currentProcess.StatusProcess[startProcessTime].relativeStartTime);
                     currentProcess.StatusProcess = {
                         ...currentProcess.StatusProcess,
                         [tempRelativeTime]:{
