@@ -20,7 +20,7 @@ const GanttDiagram = () => {
         const processArray = [];
         for(let processInstant in process.StatusProcess) {
             processArray.push({
-                variant: !process.StatusProcess[processInstant].wasLocked? 'success' : 'warning',
+                variant: !process.StatusProcess[processInstant].wasLocked? 'success' : 'primary',
                 now: calcPercentage(process.StatusProcess[processInstant].relativeStartTime),
             });
         }
