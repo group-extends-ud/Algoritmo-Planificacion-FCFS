@@ -58,8 +58,8 @@ const GanttDiagram = () => {
             <div className="times">
                 {getTimes().map((time) => time)}
             </div>
-            <div className="line">
-                {processList.map((process) => <div className="line" key={process.Id}>{process.EndTime !== -1?  getProgressBar(process) : undefined}</div>)}
+            <div className="lines">
+                {processList.map((process) => <div className="line" key={process.Id}>{process.EndTime !== -1?  <><p>{process.Name}</p>{getProgressBar(process)}</> : undefined}</div>)}
             </div>
         </div>
     );
