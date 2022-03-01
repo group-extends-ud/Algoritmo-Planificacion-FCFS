@@ -104,5 +104,5 @@ export const usePlanificationSolver = (): void => {
                 });
             }, TIMEOUT);
         }
-    }, [algorithmStatus, currentProcess, processList, dispatch, TIMEOUT, executed, nextProcess]);
+    }, [algorithmStatus, currentProcess, processList, dispatch, TIMEOUT, executed, nextProcess,lockedProcess]);
 }
