@@ -34,15 +34,13 @@ const ProcessSettings = () => {
 
             currentProcess.currentProcess.BurstTime = currentProcess.executed;
             blockedProcess.BurstTime -= currentProcess.executed;
+            blockedProcess.LockedTime = 4;
 
             dispatch(
                 setCurrentProcess(currentProcess.currentProcess)
             );
             dispatch(
                 addProcessBlocked(blockedProcess)
-            );
-            dispatch(
-                addProcess(blockedProcess)
             );
         }
     }
@@ -174,8 +172,8 @@ const ProcessSettings = () => {
             </Button>
 
             <Button
-                onClick={() => blockProcess()}
-                variant="warning"
+                onClick={blockProcess}
+                variant="danger"
             >
                 Bloquear Proceso
             </Button>

@@ -9,14 +9,7 @@ import { useAppSelector } from 'hooks/redux';
 const ProcessTable = () => {
 
     const processList = useAppSelector(({ computedProcess:{ value } }) => value );
-
-    const getProcessExecutionAsArray = (process: ProcessModel) => {
-        const array = [];
-        for(let processStatus in process.StatusProcess) {
-            array.push({key: processStatus, value: process.StatusProcess[processStatus]});
-        }
-        return array;
-    };
+    const lockedProcess = useAppSelector(({ queueBlockedProcess:{value} }) => value);
 
     return (
         <div className='table-container scrollable'>
@@ -48,30 +41,39 @@ const ProcessTable = () => {
                     ))}
                 </tbody>
             </Table>
+            <br />
+            <h4>
+                Tabla de Procesos Bloqueados
+            </h4>
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Nombre</th>
-                        <th>Inicio del estado</th>
-                        <th>Duración del estado</th>
-                        <th>Estado</th>
+                        <th>Tiempo de llegada</th>
+                        <th>Rafaga</th>
+                        <th>Tiempo de comienzo</th>
+                        <th>Tiempo de finalización</th>
+                        <th>Tiempo de retorno</th>
+                        <th>Tiempo de espera</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {processList.map((process: ProcessModel) => (
-                        getProcessExecutionAsArray(process).map((processExecution: any, index: number) => (
-                            <tr key={index}>
-                            <td>{process.Id}</td>
-                            <td>{process.Name}</td>
-                            <td>{processExecution.key}</td>
-                            <td>{processExecution.value.relativeStartTime}</td>
-                            <td>{processExecution.value.wasLocked? 'Bloqueado' : 'En Ejecucion'}</td>
+                    {lockedProcess.map(({ processBlocked }) => (
+                        <tr key={processBlocked.Id}>
+                            <td>{processBlocked.Id}</td>
+                            <td>{processBlocked.Name}</td>
+                            <td>{processBlocked.CommingTime}</td>
+                            <td>{processBlocked.BurstTime}</td>
+                            <td>{processBlocked.StartTime === -1 ? '-' : processBlocked.StartTime}</td>
+                            <td>{processBlocked.EndTime === -1 ? '-' : processBlocked.EndTime}</td>
+                            <td>{processBlocked.TurnAroundTime === -1 ? '-' : processBlocked.TurnAroundTime}</td>
+                            <td>{processBlocked.WaitingTime === -1 ? '-' : processBlocked.WaitingTime}</td>
                         </tr>
-                        ))
                     ))}
                 </tbody>
             </Table>
+            
         </div>
     );
 }

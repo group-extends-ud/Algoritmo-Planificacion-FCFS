@@ -31,6 +31,11 @@ const GanttDiagram = () => {
                 />
                 <ProgressBar
                     animated
+                    variant="primary"
+                    now={calcPercentage((process.LockedTime !== -1)?(process.LockedTime):(0))}
+                />
+                <ProgressBar
+                    animated
                     variant="success"
                     now={calcPercentage(process.BurstTime)}
                 />
