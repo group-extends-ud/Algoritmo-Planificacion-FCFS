@@ -28,6 +28,11 @@ export type PropsLocked = Props & {
 }
 
 export type CurrentProcess = {
-    isBlocked:boolean,
-    currentProcess:ProcessModel | undefined
+    executed: number,
+    currentProcess: ProcessModel | undefined
+}
+
+export type ProcessBlocked = {
+    waiting: number,
+    processBlocked: ProcessModel
 }

@@ -64,5 +64,15 @@ export class ProcessModel extends ProcessInputModel {
 
     public get StatusProcess(): any {return this.statusProcess}
     public set StatusProcess(statusProcess: any) {this.statusProcess = statusProcess;}
+
+    public copy(): ProcessModel {
+        return new ProcessModel(
+            new ProcessInputModel(
+                `${this.Name}*`,
+                this.CommingTime,
+                this.BurstTime
+            )
+        );
+    }
     
 }

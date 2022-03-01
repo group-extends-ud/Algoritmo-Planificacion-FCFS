@@ -6,21 +6,23 @@ const currentProcessSlice = createSlice({
     name:'currentProcess',
     initialState:{
         value:{
-            isBlocked:false,
-            currentProcess:undefined 
+            executed: 0,
+            currentProcess: undefined 
         } as CurrentProcess
     },
     reducers:{
         setCurrentProcess(state,{ payload }: PayloadAction<ProcessModel | undefined>){
             state.value.currentProcess = payload;
         },
-        updateLockedStatus(state,{ payload }: PayloadAction<boolean>){
-            if(state.value.currentProcess)
-                state.value.isBlocked = payload;
+        incrementExecuted(state) {
+            state.value.executed++;
+        },
+        resetExecuted(state) {
+            state.value.executed = 0;
         }
     }
 });
 
-export const { setCurrentProcess,updateLockedStatus } = currentProcessSlice.actions;
+export const { setCurrentProcess, incrementExecuted, resetExecuted } = currentProcessSlice.actions;
 
 export default currentProcessSlice.reducer;

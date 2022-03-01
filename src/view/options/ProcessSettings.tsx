@@ -8,18 +8,19 @@ import { ProcessModel, ProcessInputModel } from 'models/ProcessModel';
 import { getLastIncomming } from "util/processUtil";
 
 import { addProcess } from 'util/store/computedProcess';
-import { setCurrentProcess, updateLockedStatus } from 'util/store/currentProcess';
+import { setCurrentProcess } from 'util/store/currentProcess';
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { setAlgorithmStatus } from "util/store/algorithmStatus";
 import { updateTimer } from "util/store/timer";
+import { addProcessBlocked } from "util/store/queueBlockedProcess";
 
 
 const ProcessSettings = () => {
 
-    const processList = useAppSelector(({ computedProcess: { value } }) => value );
-    const currentProcess = useAppSelector(({ currentProcess: { value } }) => value );
-    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value );
-    const timer = useAppSelector(({ timer: { value } }) => value );
+    const processList = useAppSelector(({ computedProcess: { value } }) => value);
+    const currentProcess = useAppSelector(({ currentProcess: { value } }) => value);
+    const algorithmStatus = useAppSelector(({ algorithmStatus: { value } }) => value);
+    const timer = useAppSelector(({ timer: { value } }) => value);
 
 
     const dispatch = useAppDispatch();
@@ -28,11 +29,22 @@ const ProcessSettings = () => {
     const handleClose = () => setShow(false);
 
     const blockProcess = () => {
-        dispatch(
-            updateLockedStatus(
-                !currentProcess.isBlocked
-            )
-        )
+        if (currentProcess.currentProcess) {
+            const blockedProcess = currentProcess.currentProcess.copy();
+
+            currentProcess.currentProcess.BurstTime = currentProcess.executed;
+            blockedProcess.BurstTime -= currentProcess.executed;
+
+            dispatch(
+                setCurrentProcess(currentProcess.currentProcess)
+            );
+            dispatch(
+                addProcessBlocked(blockedProcess)
+            );
+            dispatch(
+                addProcess(blockedProcess)
+            );
+        }
     }
 
     const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '' });
@@ -76,7 +88,7 @@ const ProcessSettings = () => {
     }
 
     const initProcess = (): void => {
-        if(!currentProcess.currentProcess) {
+        if (!currentProcess.currentProcess) {
             dispatch(
                 setCurrentProcess(
                     processList.at(0)
@@ -163,9 +175,9 @@ const ProcessSettings = () => {
 
             <Button
                 onClick={() => blockProcess()}
-                variant={currentProcess.isBlocked? 'warning' : 'danger'}
+                variant="warning"
             >
-                {currentProcess.isBlocked? 'Desbloquear Bloqueado' : 'Bloquear Proceso'}
+                Bloquear Proceso
             </Button>
         </div>
     );
