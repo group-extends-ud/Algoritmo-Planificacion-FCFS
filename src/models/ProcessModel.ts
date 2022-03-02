@@ -4,25 +4,31 @@ export class ProcessInputModel {
     private name: string;
     private commingTime: number;
     private burstTime: number;
+    private priority: number;
 
     public constructor(
         name: string,
         commingTime: number,
-        burstTime: number
+        burstTime: number,
+        priority: number,
         ) {
         this.name = name;
         this.commingTime = commingTime;
         this.burstTime = burstTime;
+        this.priority = priority;
     }
 
-    public get Name(): string {return this.name}
+    public get Name(): string {return this.name;}
     public set Name(name: string) {this.name = name;}
 
-    public get CommingTime(): number {return this.commingTime}
+    public get CommingTime(): number {return this.commingTime;}
     public set CommingTime(commingTime: number) {this.commingTime = commingTime;}
 
-    public get BurstTime(): number {return this.burstTime}
+    public get BurstTime(): number {return this.burstTime;}
     public set BurstTime(burstTime: number) {this.burstTime = burstTime;}
+
+    public get Priority(): number {return this.priority;}
+    public set Priority(priority: number) {this.priority = priority;}
 }
 
 export class ProcessModel extends ProcessInputModel {
@@ -34,8 +40,8 @@ export class ProcessModel extends ProcessInputModel {
     private lockedTime:number;
     private statusProcess:any;
 
-    public constructor({Name, CommingTime, BurstTime}: ProcessInputModel) {
-        super(Name, CommingTime, BurstTime);
+    public constructor({Name, CommingTime, BurstTime, Priority}: ProcessInputModel) {
+        super(Name, CommingTime, BurstTime, Priority);
         this.id = v4();
         this.startTime = -1;
         this.endTime = -1;
@@ -70,7 +76,8 @@ export class ProcessModel extends ProcessInputModel {
             new ProcessInputModel(
                 `${this.Name}*`,
                 this.CommingTime,
-                this.BurstTime
+                this.BurstTime,
+                this.Priority,
             )
         );
     }

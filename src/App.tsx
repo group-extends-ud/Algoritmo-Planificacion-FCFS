@@ -1,12 +1,19 @@
 import React from 'react';
 import './App.css';
 import MainView from 'view/MainView';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 
 const App = () => {
 
   return (
-    <MainView />
+    <BrowserRouter>
+    <Routes>
+      <Route path="/">
+        <Route path=':name' element={<MainView />} />
+      </Route>
+    </Routes>
+    </BrowserRouter>
   );
 }
 

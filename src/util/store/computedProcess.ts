@@ -5,9 +5,9 @@ const computedProcessSlice = createSlice({
     name:'computedProcess',
     initialState:{
         value:[
-            new ProcessModel(new ProcessInputModel('Bash',0,5)),
-            new ProcessModel(new ProcessInputModel('B',0,2)),
-            new ProcessModel(new ProcessInputModel('C',0,6)),
+            new ProcessModel(new ProcessInputModel('Bash',0,5, 0)),
+            new ProcessModel(new ProcessInputModel('B',0,2, 0)),
+            new ProcessModel(new ProcessInputModel('C',0,6, 0)),
         ]
     },
     reducers:{

@@ -4,12 +4,17 @@ import './table.css';
 
 import { ProcessModel } from 'models/ProcessModel';
 import { useAppSelector } from 'hooks/redux';
+import { useParams } from 'react-router-dom';
 
 
 const ProcessTable = () => {
 
+    const params = useParams();
+
     const processList = useAppSelector(({ computedProcess:{ value } }) => value );
     const lockedProcess = useAppSelector(({ queueBlockedProcess:{value} }) => value);
+
+    const isPriorityEnabled = params.name === 'usePrioritySolver';
 
     return (
         <div className='table-container scrollable'>
@@ -22,6 +27,7 @@ const ProcessTable = () => {
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>Tiempo de llegada</th>
+                        {isPriorityEnabled && <th>Prioridad</th>}
                         <th>Rafaga</th>
                         <th>Tiempo de comienzo</th>
                         <th>Tiempo de finalización</th>
@@ -35,6 +41,7 @@ const ProcessTable = () => {
                             <td>{process.Id}</td>
                             <td>{process.Name}</td>
                             <td>{process.CommingTime}</td>
+                            {isPriorityEnabled && <td>{process.Priority}</td>}
                             <td>{process.BurstTime}</td>
                             <td>{process.StartTime === -1 ? '-' : process.StartTime}</td>
                             <td>{process.EndTime === -1 ? '-' : process.EndTime}</td>

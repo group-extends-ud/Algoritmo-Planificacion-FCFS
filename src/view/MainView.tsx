@@ -5,20 +5,21 @@ import Options from './options/Options';
 import './main.css';
 
 //
-import { usePlanificationSolver } from 'hooks/firstComeSolver';
-import { useSolver } from 'hooks/handlerSolver';
-import { useAppSelector } from 'hooks/redux';
+import { useFCFSSolver } from 'hooks/firstComeSolver';
+import { usePrioritySolver, useSJFSolver } from 'hooks/algorithmSolvers';
+import { useParams } from 'react-router-dom';
 
 const MainView = () => {
 
-  const hooksNames = {
-    usePlanificationSolver,
-    useSolver
+  const params = useParams();
+
+  const hooksHandler: {[x: string]: () => void} = {
+    useFCFSSolver,
+    usePrioritySolver,
+    useSJFSolver,
   }
 
-  const useHandler = useAppSelector(({ algorithmSolver:{ value } }):string => value);
-
-  hooksNames[useHandler]();
+  hooksHandler[params.name!]();
 
   return (
     <div className='main'>

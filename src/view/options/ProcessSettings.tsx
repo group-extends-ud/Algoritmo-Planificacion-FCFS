@@ -13,9 +13,13 @@ import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { setAlgorithmStatus } from "util/store/algorithmStatus";
 import { updateTimer } from "util/store/timer";
 import { addProcessBlocked } from "util/store/queueBlockedProcess";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const ProcessSettings = () => {
+
+    const params = useParams();
+    const navigator = useNavigate();
 
     const processList = useAppSelector(({ computedProcess: { value } }) => value);
     const currentProcess = useAppSelector(({ currentProcess: { value } }) => value);
@@ -35,6 +39,7 @@ const ProcessSettings = () => {
             currentProcess.currentProcess.BurstTime = currentProcess.executed;
             blockedProcess.BurstTime -= currentProcess.executed;
             blockedProcess.LockedTime = 4;
+            blockedProcess.CommingTime = getLastIncomming(processList).CommingTime;
 
             dispatch(
                 setCurrentProcess(currentProcess.currentProcess)
@@ -45,7 +50,7 @@ const ProcessSettings = () => {
         }
     }
 
-    const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '' });
+    const [form, setForm] = useState<{ [x: string]: string }>({ name: '', burst: '', incomming: '', priority: '' });
     const handleChange = (e: any) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -63,7 +68,12 @@ const ProcessSettings = () => {
                         dispatch(
                             addProcess(
                                 new ProcessModel(
-                                    new ProcessInputModel(form.name, parseInt(form.incomming), parseInt(form.burst))
+                                    new ProcessInputModel(
+                                        form.name,
+                                        parseInt(form.incomming),
+                                        parseInt(form.burst),
+                                        form.priority? parseInt(form.priority) : 0
+                                    )
                                 )
                             )
                         );
@@ -148,6 +158,14 @@ const ProcessSettings = () => {
                             value={form.incomming}
                             onChange={handleChange}
                         />
+                        {params.name === 'usePrioritySolver' && <Form.Control
+                            className="form-process-input"
+                            name="priority"
+                            type="number"
+                            placeholder="Prioridad" min="0"
+                            value={form.priority}
+                            onChange={handleChange}
+                        />}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -178,11 +196,10 @@ const ProcessSettings = () => {
             </Button>
 
             <br />
-            <Form.Select aria-label="Default select example">
-                <option>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <Form.Select value={params.name} onChange={({target: {value}}) => navigator(`/${value}`, {replace: true})} aria-label="Seleccione el algoritmo a utilizar">
+                <option value="useFCFSSolver">FCFS</option>
+                <option value="useSJFSolver">SJF</option>
+                <option value="usePrioritySolver">Priority</option>
             </Form.Select>
         </div>
     );

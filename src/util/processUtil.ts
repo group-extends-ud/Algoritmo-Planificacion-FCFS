@@ -27,3 +27,19 @@ export const getLastIncomming = (processes: ProcessModel[]): ProcessModel => {
 
     return highestCommingTimeProcess;
 }
+
+export const sortArray = (processes: ProcessModel[], sortBy: string): ProcessModel[] => {
+    if (sortBy === 'commintime') {
+        return processes.sort((a, b) => a.CommingTime - b.CommingTime);
+    } else if (sortBy === 'bursttime') {
+        return processes.sort((a, b) => a.BurstTime - b.BurstTime);
+    } else if (sortBy === 'priority') {
+        return processes.sort((a, b) => a.Priority - b.Priority);
+    } else if (sortBy === 'waitingtime') {
+        return processes.sort((a, b) => a.WaitingTime - b.WaitingTime);
+    } else if (sortBy === 'turnaroundtime') {
+        return processes.sort((a, b) => a.TurnAroundTime - b.TurnAroundTime);
+    } else {
+        return processes;
+    }
+}

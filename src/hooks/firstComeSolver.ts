@@ -6,7 +6,9 @@ import { incrementExecuted, resetExecuted, setCurrentProcess } from 'util/store/
 import { updateWaitingTime, removeElement } from 'util/store/queueBlockedProcess';
 import { useAppSelector, useAppDispatch } from './redux';
 
-export const usePlanificationSolver = (): void => {
+export const useFCFSSolver = (): void => {
+
+    console.log("Algoritmo FCFS");
 
     const processList = useAppSelector(({ computedProcess: { value } }) => value);
     const { currentProcess, executed } = useAppSelector(({ currentProcess: { value } }) => value);
