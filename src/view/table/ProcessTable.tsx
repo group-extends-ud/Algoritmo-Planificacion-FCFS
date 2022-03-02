@@ -13,6 +13,9 @@ const ProcessTable = () => {
 
     return (
         <div className='table-container scrollable'>
+            <h4>
+                Procesos
+            </h4>
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
@@ -43,7 +46,7 @@ const ProcessTable = () => {
             </Table>
             <br />
             <h4>
-                Tabla de Procesos Bloqueados
+                Procesos Bloqueados
             </h4>
             <Table striped bordered hover responsive>
                 <thead>

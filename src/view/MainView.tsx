@@ -4,11 +4,21 @@ import GanttDiagram from './gannt/GanttDiagram';
 import Options from './options/Options';
 import './main.css';
 
-import { usePlanificationSolver } from 'hooks/FirstComeSolver';
+//
+import { usePlanificationSolver } from 'hooks/firstComeSolver';
+import { useSolver } from 'hooks/handlerSolver';
+import { useAppSelector } from 'hooks/redux';
 
 const MainView = () => {
 
-  usePlanificationSolver();
+  const hooksNames = {
+    usePlanificationSolver,
+    useSolver
+  }
+
+  const useHandler = useAppSelector(({ algorithmSolver:{ value } }):string => value);
+
+  hooksNames[useHandler]();
 
   return (
     <div className='main'>

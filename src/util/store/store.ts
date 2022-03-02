@@ -5,6 +5,7 @@ import computedProcess from './computedProcess';
 import currentProcess from './currentProcess';
 import queueBlockedProcess from './queueBlockedProcess';
 import timer from './timer';
+import algorithmSolver from './algorithmSolver';
 
 
 export const store = configureStore({
@@ -17,7 +18,8 @@ export const store = configureStore({
         currentProcess,
         timer,
         algorithmStatus,
-        queueBlockedProcess
+        queueBlockedProcess,
+        algorithmSolver
     }
 });
 
