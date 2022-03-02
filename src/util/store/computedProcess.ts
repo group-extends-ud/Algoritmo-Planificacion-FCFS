@@ -21,10 +21,13 @@ const computedProcessSlice = createSlice({
                 }
                 return process;
             });
+        },
+        changeComputesList(state,{ payload }:PayloadAction<ProcessModel[]>){
+            state.value = payload;
         }
     }
 });
 
-export const { addProcess, updateProcess } = computedProcessSlice.actions;
+export const { addProcess, updateProcess,changeComputesList } = computedProcessSlice.actions;
 
 export default computedProcessSlice.reducer;

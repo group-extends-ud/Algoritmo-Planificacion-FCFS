@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
 import MainView from 'view/MainView';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useParams,useNavigate } from 'react-router-dom';
 
 
 const App = () => {
-
   return (
     <BrowserRouter>
     <Routes>
