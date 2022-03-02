@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getLastExecutedProcess } from 'util/processUtil';
 import { setAlgorithmStatus } from 'util/store/algorithmStatus';
 import { addProcess, updateProcess } from 'util/store/computedProcess';
@@ -17,6 +17,8 @@ export const useFCFSSolver = (): void => {
     const lockedProcess = useAppSelector(({ queueBlockedProcess: { value } }) => value);
 
     const dispatch = useAppDispatch();
+
+    const [canExecute, setExecuteStatus] = useState(true);
 
     const TIMEOUT = timer * 1000;
 
@@ -43,7 +45,7 @@ export const useFCFSSolver = (): void => {
     }, [TIMEOUT, currentProcess, dispatch, processList]);
 
     useEffect(() => {
-        if (algorithmStatus) {
+        if (algorithmStatus && canExecute) {
             if (currentProcess) {
                 if (currentProcess.EndTime === -1) {
                     const lastProcess = getLastExecutedProcess(processList);
@@ -68,17 +70,9 @@ export const useFCFSSolver = (): void => {
                             incrementExecuted()
                         )
                     }
-                    dispatch(
-                        setAlgorithmStatus(
-                            false
-                        )
-                    );
+                    setExecuteStatus(false);
                     setTimeout(() => {
-                        dispatch(
-                            setAlgorithmStatus(
-                                true
-                            )
-                        );
+                        setExecuteStatus(true);
                     }, TIMEOUT);
                 } else {
                     nextProcess();
@@ -106,5 +100,5 @@ export const useFCFSSolver = (): void => {
                 });
             }, TIMEOUT);
         }
-    }, [algorithmStatus, currentProcess, processList, dispatch, TIMEOUT, executed, nextProcess,lockedProcess]);
+    }, [algorithmStatus, currentProcess, processList, dispatch, TIMEOUT, executed, nextProcess, lockedProcess, canExecute]);
 }
