@@ -1,10 +1,22 @@
 # Algoritmo FCFS
 
-Implementación del algoritmo de planificación de procesos `First Come First Served`
+Implementación del algoritmo de planificación de procesos para sistemas operativos
 
-## Ejecución
+Algoritmos implementados actualmente:
+ - `First Come First Served`
+ - `Shortest Job First`
+ - `Prioridad`
 
-`npm start`
+## Demo
+
+- https://solver-planification-algorithms.netlify.app/
+
+## Ejecución en modo desarrollo
+
+```console
+npm i
+npm start
+```
 
 ## Integrantes
 
