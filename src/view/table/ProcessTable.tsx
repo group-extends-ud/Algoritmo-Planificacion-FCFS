@@ -64,19 +64,17 @@ const ProcessTable = () => {
                         <th>Nombre</th>
                         <th>Tiempo de llegada</th>
                         <th>Rafaga</th>
-                        <th>Tiempo de comienzo</th>
-                        <th>Tiempo de finalización</th>
-                        <th>Tiempo de retorno</th>
-                        <th>Tiempo de espera</th>
+                        <th style={{textAlign:'center'}}>Restante en la cola de bloqueados</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {lockedProcess.map(({ processBlocked }) => (
+                    {lockedProcess.map(({ processBlocked,waiting }) => (
                         <tr key={processBlocked.Id}>
                             <td>{processBlocked.Id}</td>
                             <td>{processBlocked.Name}</td>
                             <td>{processBlocked.CommingTime}</td>
                             <td>{processBlocked.BurstTime}</td>
+                            <td style={{color:'red'}}>{((waiting < 0)?('Saliendo'):(waiting)) }</td>
                         </tr>
                     ))}
                 </tbody>

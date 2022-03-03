@@ -32,7 +32,7 @@ export class ProcessInputModel {
 }
 
 export class ProcessModel extends ProcessInputModel {
-    private id: string;
+    private id: number;
     private startTime: number;
     private endTime: number;
     private waitingTime: number;
@@ -40,9 +40,9 @@ export class ProcessModel extends ProcessInputModel {
     private lockedTime:number;
     private executed: number;
 
-    public constructor({Name, CommingTime, BurstTime, Priority}: ProcessInputModel) {
+    public constructor(id:number,{Name, CommingTime, BurstTime, Priority}: ProcessInputModel) {
         super(Name, CommingTime, BurstTime, Priority);
-        this.id = v4();
+        this.id = id;
         this.startTime = -1;
         this.endTime = -1;
         this.waitingTime = -1;
@@ -51,7 +51,7 @@ export class ProcessModel extends ProcessInputModel {
         this.executed = -1;
     }
 
-    public get Id(): string {return this.id;}
+    public get Id(): number {return this.id;}
 
     public get StartTime(): number {return this.startTime}
     public set StartTime(startTime: number) {this.startTime = startTime;}
@@ -71,8 +71,9 @@ export class ProcessModel extends ProcessInputModel {
     public get Executed(): number {return this.executed}
     public set Executed(executed: number) {this.executed = executed;}
 
-    public copy(): ProcessModel {
+    public copy(id:number): ProcessModel {
         return new ProcessModel(
+            id,
             new ProcessInputModel(
                 `${this.Name}*`,
                 this.CommingTime,

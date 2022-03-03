@@ -92,9 +92,19 @@ export const useFCFSSolver = (): void => {
                         dispatch(
                             addProcess(lockedProcess.processBlocked)
                         );
+
                         dispatch(
                             removeElement()
                         );
+
+                        if(!currentProcess){
+                            const currentIndex = processList.indexOf(lockedProcess.processBlocked);
+                            dispatch(
+                                setCurrentProcess(
+                                    processList.at(currentIndex)
+                                )
+                            );
+                        }
                     } else {
                         dispatch(
                             updateWaitingTime(lockedProcess)

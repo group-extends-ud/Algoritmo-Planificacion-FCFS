@@ -4,7 +4,6 @@ import GanttDiagram from './gannt/GanttDiagram';
 import Options from './options/Options';
 import './main.css';
 
-//
 import { useFCFSSolver } from 'hooks/firstComeSolver';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
@@ -18,29 +17,30 @@ const MainView = () => {
   const dispatch = useAppDispatch();
   const processList = useAppSelector(({ computedProcess: { value } }) => value);
 
-  if(params.name === 'useSJFSolver') {
+
+  if (params.name === 'useSJFSolver') {
     console.log("Algoritmo SJF");
     const sorterProcessArray = groupBy(processList, (a, b) => a.BurstTime - b.BurstTime);
-    if(JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
+    if (JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
       dispatch(
         changeComputesList(sorterProcessArray)
-    );
+      );
     }
-  } else if(params.name === 'usePrioritySolver') {
+  } else if (params.name === 'usePrioritySolver') {
     console.log("Algoritmo Priority");
     const sorterProcessArray = groupBy(processList, (a, b) => b.Priority - a.Priority);
-    if(JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
+    if (JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
       dispatch(
         changeComputesList(sorterProcessArray)
-    );
+      );
     }
-  } else if(params.name === 'useFCFSSolver') {
+  } else if (params.name === 'useFCFSSolver') {
     console.log("Algoritmo FCFS");
-    const sorterProcessArray = groupBy(processList, (a, b) => a.EndTime - b.EndTime);
-    if(JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
+    const sorterProcessArray = groupBy(processList, (a, b) => a.Id - b.Id);
+    if (JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
       dispatch(
         changeComputesList(sorterProcessArray)
-    );
+      );
     }
   }
 

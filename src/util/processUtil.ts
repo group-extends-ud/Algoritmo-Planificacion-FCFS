@@ -29,12 +29,23 @@ export const getLastIncomming = (processes: ProcessModel[]): ProcessModel => {
 }
 
 export const groupBy = (array: ProcessModel[], sortCondition: (a: ProcessModel, b: ProcessModel) => number): ProcessModel[] => {
-    const groups: {[x: number]: ProcessModel[]} = {};
+    const groups: { [x: number]: ProcessModel[] } = {};
     array.forEach(process => {
-      groups[process.CommingTime] = groups[process.CommingTime] || [];
-      groups[process.CommingTime].push(process);
+        groups[process.CommingTime] = groups[process.CommingTime] || [];
+        groups[process.CommingTime].push(process);
     });
- return Object.keys(groups).map(group => {
-   return groups[parseInt(group)].sort(sortCondition);
- }).flat()
+    return Object.keys(groups).map(group => {
+        return groups[parseInt(group)].sort((a,b) => sortByProperty(a,b,sortCondition));
+    }).flat()
+}
+
+const sortByProperty = (a: ProcessModel, b: ProcessModel, sortFunction: (a: ProcessModel, b: ProcessModel) => number): number => {
+    if (a.EndTime !== -1 && b.EndTime === -1) {
+        return -1;
+    } else if(a.EndTime === -1 && b.EndTime !== -1){
+        return 1;
+    } else if (a.EndTime !== -1 && b.EndTime !== -1) {
+        return 0;
+    }
+    return sortFunction(a, b);;
 }

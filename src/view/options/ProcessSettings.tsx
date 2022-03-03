@@ -34,7 +34,7 @@ const ProcessSettings = () => {
 
     const blockProcess = () => {
         if (currentProcess.currentProcess) {
-            const blockedProcess = currentProcess.currentProcess.copy();
+            const blockedProcess = currentProcess.currentProcess.copy(processList.length);
 
             currentProcess.currentProcess.BurstTime = currentProcess.executed;
             blockedProcess.BurstTime -= currentProcess.executed;
@@ -68,6 +68,7 @@ const ProcessSettings = () => {
                         dispatch(
                             addProcess(
                                 new ProcessModel(
+                                    processList.length,
                                     new ProcessInputModel(
                                         form.name,
                                         parseInt(form.incomming),
