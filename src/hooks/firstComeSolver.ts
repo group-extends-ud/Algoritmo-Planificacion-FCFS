@@ -54,22 +54,25 @@ export const useFCFSSolver = (): void => {
                     } else {
                         currentProcess.StartTime = currentProcess.CommingTime;
                     }
+                    currentProcess.Executed = executed;
+
                     if (executed === currentProcess.BurstTime) {
                         currentProcess.EndTime = currentProcess.StartTime + currentProcess.BurstTime +
                             ((currentProcess.LockedTime !== -1) ? (currentProcess.LockedTime) : (0));
                         currentProcess.TurnAroundTime = currentProcess.EndTime - currentProcess.CommingTime;
                         currentProcess.WaitingTime = (currentProcess.TurnAroundTime - currentProcess.BurstTime);
-
-                        dispatch(
-                            updateProcess(
-                                currentProcess
-                            )
-                        );
                     } else {
                         dispatch(
                             incrementExecuted()
                         )
                     }
+
+                    dispatch(
+                        updateProcess(
+                            currentProcess
+                        )
+                    );
+
                     setExecuteStatus(false);
                     setTimeout(() => {
                         setExecuteStatus(true);

@@ -29,6 +29,7 @@ const ProcessTable = () => {
                         <th>Tiempo de llegada</th>
                         {isPriorityEnabled && <th>Prioridad</th>}
                         <th>Rafaga</th>
+                        <th>Ejecutado</th>
                         <th>Tiempo de comienzo</th>
                         <th>Tiempo de finalización</th>
                         <th>Tiempo de retorno</th>
@@ -43,6 +44,7 @@ const ProcessTable = () => {
                             <td>{process.CommingTime}</td>
                             {isPriorityEnabled && <td>{process.Priority}</td>}
                             <td>{process.BurstTime}</td>
+                            <td>{process.Executed === -1 ? '-' : process.Executed}</td>
                             <td>{process.StartTime === -1 ? '-' : process.StartTime}</td>
                             <td>{process.EndTime === -1 ? '-' : process.EndTime}</td>
                             <td>{process.TurnAroundTime === -1 ? '-' : process.TurnAroundTime}</td>
@@ -75,10 +77,6 @@ const ProcessTable = () => {
                             <td>{processBlocked.Name}</td>
                             <td>{processBlocked.CommingTime}</td>
                             <td>{processBlocked.BurstTime}</td>
-                            <td>{processBlocked.StartTime === -1 ? '-' : processBlocked.StartTime}</td>
-                            <td>{processBlocked.EndTime === -1 ? '-' : processBlocked.EndTime}</td>
-                            <td>{processBlocked.TurnAroundTime === -1 ? '-' : processBlocked.TurnAroundTime}</td>
-                            <td>{processBlocked.WaitingTime === -1 ? '-' : processBlocked.WaitingTime}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -34,6 +34,14 @@ const MainView = () => {
         changeComputesList(sorterProcessArray)
     );
     }
+  } else if(params.name === 'useFCFSSolver') {
+    console.log("Algoritmo FCFS");
+    const sorterProcessArray = groupBy(processList, (a, b) => a.EndTime - b.EndTime);
+    if(JSON.stringify(processList) !== JSON.stringify(sorterProcessArray)) {
+      dispatch(
+        changeComputesList(sorterProcessArray)
+    );
+    }
   }
 
   useFCFSSolver();
