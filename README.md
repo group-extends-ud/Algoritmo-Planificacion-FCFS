@@ -1,6 +1,6 @@
-# Algoritmo FCFS
+# Algoritmo No expulsivos
 
-Implementación del algoritmo de planificación de procesos para sistemas operativos
+Implementación del algoritmo de planificación de procesos para sistemas operativos, principalmente algoritmos no expulsivos 
 
 Algoritmos implementados actualmente:
  - `First Come First Served`
